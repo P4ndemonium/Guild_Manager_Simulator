@@ -8,7 +8,7 @@ public class HoverReveal : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
     private Image image;
     private bool isHovered = false;
-    [SerializeField] private Adventurer adventurer;
+    [SerializeField] private Unit adventurer;
 
     void Awake()
     {
@@ -17,13 +17,15 @@ public class HoverReveal : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     void Update()
     {
-        // Smoothly fade the alpha based on hover state
         float targetAlpha = isHovered ? 0.5f : 0f;
         Color c = image.color;
-        c.a = targetAlpha;
-        image.color = c;
 
-        if (adventurer.isHired)
+        if (!adventurer.IsHired)
+        {
+            c.a = targetAlpha;
+            image.color = c;
+        }
+        else 
         {
             c.a = 1;
             image.color = c;

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Adventurer : Unit
 {
-    [SerializeField] public bool isHired = false;
-
     public override void RandomizeStats()
     {
         STR = Random.Range(1, 101);
@@ -22,7 +20,7 @@ public class Adventurer : Unit
         currentHealth = maxHealth;
         physicalDamage = STR / 2;
         magicDamage = INT / 2;
-        age = Random.Range(17, 61);
+        age = Random.Range(17, 31);
     }
 
     // Container for Given Names

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
-    [Header("Base Statistics")]
+    [Header("Base Stats")]
     [SerializeField] protected string unitName;
 
     [SerializeField] protected int STR; // Strength     - Physical Damage
@@ -17,13 +17,17 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected int SPI; // Spirit       - Magic damage reduction
     [SerializeField] protected int AGI; // Agility      - Chance of getting an attack on this units turn
 
-    [SerializeField] protected float GRO; // Growth     - Rate of improvement or reduction of stats      # Maybe make it change every year and reduce as age goes by
-    [SerializeField] protected float age;
+    [SerializeField] protected int GRO; // Growth       - Rate of improvement or reduction of stats      # Maybe make it change every year and reduce as age goes by
+    [SerializeField] protected int age;
 
     [SerializeField] protected float maxHealth;
     [SerializeField] protected float currentHealth;
     [SerializeField] protected float physicalDamage;
     [SerializeField] protected float magicDamage;
+
+    [SerializeField] protected bool isHired = false;
+    // A public way for the SaveManager to check the status
+    public bool IsHired => isHired;
 
     [Header("UI References")]
     [SerializeField] protected TextMeshProUGUI nameText;
@@ -44,4 +48,39 @@ public abstract class Unit : MonoBehaviour
 
     public virtual void RandomizeStats() { }
     public virtual void DisplayStats() { }
+
+    // Convert this unit's current stats into a data object
+    public UnitSaveData SaveToData()
+    {
+        return new UnitSaveData
+        {
+            unitName = this.unitName,
+            STR = this.STR,
+            INT = this.INT,
+            DEX = this.DEX,
+            WIS = this.WIS,
+            VIT = this.VIT,
+            END = this.END,
+            SPI = this.SPI,
+            AGI = this.AGI,
+            GRO = this.GRO,
+            age = this.age
+        };
+    }
+
+    // Apply data from a saved object back onto this unit
+    public void LoadFromData(UnitSaveData data)
+    {
+        this.unitName = data.unitName;
+        this.STR = data.STR;
+        this.INT = data.INT;
+        this.DEX = data.DEX;
+        this.WIS = data.WIS;
+        this.VIT = data.VIT;
+        this.END = data.END;
+        this.SPI = data.SPI;
+        this.AGI = data.AGI;
+        this.GRO = data.GRO;
+        this.age = data.age;
+    }
 }
