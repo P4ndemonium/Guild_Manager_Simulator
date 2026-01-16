@@ -5,10 +5,12 @@ using System.IO;
 
 public class SaveManager : MonoBehaviour
 {
+    public GameSaveFile saveFile;
+
     // Call this to save the current state to a file
     public void OnSaveButtonPressed()
     {
-        GameSaveFile saveFile = new GameSaveFile();
+        //GameSaveFile saveFile = new GameSaveFile();
         Unit[] units = FindObjectsOfType<Unit>();
 
         foreach (Unit u in units)
@@ -37,10 +39,12 @@ public class SaveManager : MonoBehaviour
         if (!File.Exists(path)) return;
 
         string json = File.ReadAllText(path);
-        GameSaveFile saveFile = JsonUtility.FromJson<GameSaveFile>(json);
+        saveFile = JsonUtility.FromJson<GameSaveFile>(json);
 
         // Logic here depends on if you want to update existing units 
         // or clear the scene and re-spawn them.
+
+
         Debug.Log("Data Loaded!");
     }
 
