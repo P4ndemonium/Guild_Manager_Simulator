@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Adventurer : Unit
 {
+    [SerializeField] protected AllSpritesLibrary library;
+
     public override void RandomizeStats()
     {
         STR = Random.Range(1, 101);
@@ -14,13 +16,14 @@ public class Adventurer : Unit
         END = Random.Range(1, 101);
         SPI = Random.Range(1, 101);
         AGI = Random.Range(1, 101);
-        GRO = Random.Range(1, 101);
 
-        maxHealth = VIT * 3;
-        currentHealth = maxHealth;
-        physicalDamage = STR / 2;
-        magicDamage = INT / 2;
+        GRO = Random.Range(1, 101);
         age = Random.Range(17, 31);
+
+        Debug.Log("Sprite count: " + library.allPossibleSprites.Count);
+        spriteID = Random.Range(0, library.allPossibleSprites.Count);
+
+        CalculateStats();
     }
 
     // Container for Given Names
@@ -59,32 +62,11 @@ public class Adventurer : Unit
         unitName = family + " " + given;
     }
 
-    public override void DisplayStats()
-    {
-        if (nameText != null && statsTextLeft != null && statsTextRight != null)
-        {
-            nameText.text = unitName;
-
-            statsTextLeft.text = $"STR: {STR}\n" +
-                                 $"DEX: {DEX}\n" +
-                                 $"VIT: {STR}\n" +
-                                 $"END: {END}\n" +
-                                 $"GRO: {GRO}";
-
-            statsTextRight.text = $"INT: {INT}\n" +
-                                  $"WIS: {WIS}\n" +
-                                  $"AGI: {AGI}\n" +
-                                  $"SPI: {SPI}\n" +
-                                  $"age: {age}";
-        }
-    }
-
     // Start is called before the first frame update
     void Start()
     {
         RandomName();
         RandomizeStats();
-        DisplayStats();
     }
 
     // Update is called once per frame

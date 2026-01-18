@@ -20,6 +20,8 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected int GRO; // Growth       - Rate of improvement or reduction of stats      # Maybe make it change every year and reduce as age goes by
     [SerializeField] protected int age;
 
+    [SerializeField] protected int spriteID;
+
     [SerializeField] protected float maxHealth;
     [SerializeField] protected float currentHealth;
     [SerializeField] protected float physicalDamage;
@@ -28,11 +30,6 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected bool isHired = false;
     // A public way for the SaveManager to check the status
     public bool IsHired => isHired;
-
-    [Header("UI References")]
-    [SerializeField] protected TextMeshProUGUI nameText;
-    [SerializeField] protected TextMeshProUGUI statsTextLeft;
-    [SerializeField] protected TextMeshProUGUI statsTextRight;
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +44,13 @@ public abstract class Unit : MonoBehaviour
     }
 
     public virtual void RandomizeStats() { }
-    public virtual void DisplayStats() { }
+    public virtual void CalculateStats() 
+    {
+        maxHealth = VIT * 3;
+        currentHealth = maxHealth;
+        physicalDamage = STR / 2;
+        magicDamage = INT / 2;
+    }
 
     // Convert this unit's current stats into a data object
     public UnitSaveData SaveToData()
@@ -64,7 +67,8 @@ public abstract class Unit : MonoBehaviour
             SPI = this.SPI,
             AGI = this.AGI,
             GRO = this.GRO,
-            age = this.age
+            age = this.age,
+            spriteID = this.spriteID
         };
     }
 
@@ -82,5 +86,8 @@ public abstract class Unit : MonoBehaviour
         this.AGI = data.AGI;
         this.GRO = data.GRO;
         this.age = data.age;
+        this.spriteID = data.spriteID;
+
+        CalculateStats();
     }
 }

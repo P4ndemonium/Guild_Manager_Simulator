@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CreateListings : MonoBehaviour
 {
-    public GameObject AdventurerListing;
+    public GameObject adventurerListing;
     public RectTransform canvas;
     public int spawnCount;
 
@@ -15,11 +15,11 @@ public class CreateListings : MonoBehaviour
 
     void SpawnListings()
     {
-        spawnCount = Random.Range(3, 9);
+        spawnCount = Random.Range(3, 11);
 
         for (int i = 0; i < spawnCount; i++)
         {
-            GameObject newPanel = Instantiate(AdventurerListing, canvas);
+            GameObject newPanel = Instantiate(adventurerListing, canvas);
             RectTransform panelRT = newPanel.GetComponent<RectTransform>();
 
             // Calculate safe boundaries

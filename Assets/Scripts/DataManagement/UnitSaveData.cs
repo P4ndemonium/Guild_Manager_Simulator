@@ -16,4 +16,5 @@ public class UnitSaveData
     public int AGI;
     public int GRO;
     public int age;
+    public int spriteID;
 }

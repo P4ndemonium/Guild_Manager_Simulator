@@ -2,10 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using Unity.VisualScripting;
 
 public class SaveManager : MonoBehaviour
 {
+    public static SaveManager Instance { get; private set; } // The global "hook"
     public GameSaveFile saveFile;
+
+    private void Awake()
+    {
+        if (Instance == null) { Instance = this; }
+        else { Destroy(gameObject); }
+    }
 
     // Call this to save the current state to a file
     public void OnSaveButtonPressed()

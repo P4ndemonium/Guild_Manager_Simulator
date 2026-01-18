@@ -405,7 +405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28f585532418d204f85d98a18b3b7348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AdventurerListing: {fileID: 8073895765403577993, guid: 79b00b279ae5f7845bc1bc906b584ebb, type: 3}
+  adventurerListing: {fileID: 8073895765403577993, guid: 79b00b279ae5f7845bc1bc906b584ebb, type: 3}
   canvas: {fileID: 853821400}
   spawnCount: 0
 --- !u!1 &1080861788
@@ -554,6 +554,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5043d92f93cb875469dec8731f10b583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveFile:
+    saveTimestamp: 
+    hiredAdventurers: []
 --- !u!1 &1303670996
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,6 +743,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5043d92f93cb875469dec8731f10b583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveFile:
+    saveTimestamp: 
+    hiredAdventurers: []
 --- !u!114 &1735858037
 MonoBehaviour:
   m_ObjectHideFlags: 0

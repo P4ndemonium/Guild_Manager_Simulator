@@ -532,7 +532,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6175061932718189483}
+      - m_Target: {fileID: 1388557650887192385}
         m_TargetAssemblyTypeName: Adventurer, Assembly-CSharp
         m_MethodName: Hire
         m_Mode: 1
@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bac732f2d8f1f14b824873cc165cef9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adventurer: {fileID: 6175061932718189483}
+  adventurer: {fileID: 1388557650887192385}
 --- !u!1 &8073895765403577993
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,8 +568,8 @@ GameObject:
   - component: {fileID: 500415701939512867}
   - component: {fileID: 7770815374971969020}
   - component: {fileID: 8073816307091248635}
-  - component: {fileID: 6175061932718189483}
   - component: {fileID: 5348315892642844038}
+  - component: {fileID: 1388557650887192385}
   m_Layer: 5
   m_Name: AdventurerListing
   m_TagString: Untagged
@@ -639,7 +639,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6175061932718189483
+--- !u!114 &5348315892642844038
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -648,7 +648,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 8073895765403577993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de8cee5bb37af8b4baf37fcd10d165e8, type: 3}
+  m_Script: {fileID: 11500000, guid: 36fb8b604b5e4724c9c54ca080bcb6c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rectTransform: {fileID: 0}
+  canvas: {fileID: 0}
+--- !u!114 &1388557650887192385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8073895765403577993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7490643e20a131a44bf93a56fd3921b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: 
@@ -662,14 +676,13 @@ MonoBehaviour:
   AGI: 0
   GRO: 0
   age: 0
+  spriteID: 0
   maxHealth: 0
   currentHealth: 0
   physicalDamage: 0
   magicDamage: 0
-  nameText: {fileID: 5418257702926695968}
-  statsTextLeft: {fileID: 6736623438884874772}
-  statsTextRight: {fileID: 5698014497848516587}
   isHired: 0
+  library: {fileID: 11400000, guid: 29d2fd83027f26e418f2bed2226c90d2, type: 2}
   givenNames:
   - Akari
   - Aoi
@@ -872,20 +885,10 @@ MonoBehaviour:
   - Arai
   - Ishihara
   - Ichikawa
---- !u!114 &5348315892642844038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8073895765403577993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36fb8b604b5e4724c9c54ca080bcb6c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rectTransform: {fileID: 0}
-  canvas: {fileID: 0}
+  image: {fileID: 3062937302383678605}
+  nameText: {fileID: 5418257702926695968}
+  statsTextLeft: {fileID: 6736623438884874772}
+  statsTextRight: {fileID: 5698014497848516587}
 --- !u!1 &8571212161961867202
 GameObject:
   m_ObjectHideFlags: 0
