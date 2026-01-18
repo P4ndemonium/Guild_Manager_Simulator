@@ -17,4 +17,5 @@ public class UnitSaveData
     public int GRO;
     public int age;
     public int spriteID;
+    public int squadNum;
 }

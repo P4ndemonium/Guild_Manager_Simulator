@@ -22,6 +22,7 @@ public class Adventurer : Unit
 
         Debug.Log("Sprite count: " + library.allPossibleSprites.Count);
         spriteID = Random.Range(0, library.allPossibleSprites.Count);
+        squadNum = 0;
 
         CalculateStats();
     }
@@ -54,7 +55,7 @@ public class Adventurer : Unit
         "Noguchi", "Matsuo", "Nomura", "Kikuchi", "Sano", "Onishi", "Sugimoto", "Arai", "Ishihara", "Ichikawa"
     };
 
-    public void RandomName()
+    virtual public void RandomName()
     {
         string family = familyNames[Random.Range(0, familyNames.Count)];
         string given = givenNames[Random.Range(0, givenNames.Count)];

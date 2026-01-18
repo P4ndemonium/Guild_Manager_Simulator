@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public abstract class Unit : MonoBehaviour
 {
@@ -21,6 +23,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected int age;
 
     [SerializeField] protected int spriteID;
+    [SerializeField] protected int squadNum;
 
     [SerializeField] protected float maxHealth;
     [SerializeField] protected float currentHealth;
@@ -34,17 +37,17 @@ public abstract class Unit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public virtual void RandomizeStats() { }
-    public virtual void CalculateStats() 
+    public virtual void CalculateStats()
     {
         maxHealth = VIT * 3;
         currentHealth = maxHealth;
@@ -68,7 +71,8 @@ public abstract class Unit : MonoBehaviour
             AGI = this.AGI,
             GRO = this.GRO,
             age = this.age,
-            spriteID = this.spriteID
+            spriteID = this.spriteID,
+            squadNum = this.squadNum
         };
     }
 
@@ -87,7 +91,36 @@ public abstract class Unit : MonoBehaviour
         this.GRO = data.GRO;
         this.age = data.age;
         this.spriteID = data.spriteID;
+        this.squadNum = data.squadNum;
 
         CalculateStats();
+    }
+
+    public void ClearData()
+    {
+        this.unitName = " ";
+        this.STR = 0;
+        this.INT = 0;
+        this.DEX = 0;
+        this.WIS = 0;
+        this.VIT = 0;
+        this.END = 0;
+        this.SPI = 0;
+        this.AGI = 0;
+        this.GRO = 0;
+        this.age = 0;
+        this.spriteID = -1;
+        this.squadNum = 0;
+
+        CalculateStats();
+    }
+
+    public void IncSquad()
+    {
+        squadNum += 1;
+    }
+    public void DecSquad()
+    {
+        squadNum -= 1;
     }
 }

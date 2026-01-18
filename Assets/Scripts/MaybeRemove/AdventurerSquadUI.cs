@@ -8,7 +8,13 @@ public class AdventurerSquadUI : Adventurer
     public GameObject selectionPanel;
 
     [Header("UI References")]
+    [SerializeField] protected Sprite defaultImage;
     [SerializeField] protected Image image;
+
+    private void Awake()
+    {
+        image.sprite = defaultImage;
+    }
 
     public void DisplaySquadUI()
     {
@@ -32,5 +38,21 @@ public class AdventurerSquadUI : Adventurer
         DisplaySquadUI();
 
         selectionPanel.SetActive(false);
+    }
+
+    public void RemoveAdventurerFromSquad()
+    {
+        image.sprite = defaultImage;
+        ClearData();
+    }
+
+    public override void RandomizeStats()
+    {
+        // Nothing
+    }
+
+    public override void RandomName()
+    {
+        // Nothing also :)
     }
 }

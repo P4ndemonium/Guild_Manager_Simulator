@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LoadSelector : MonoBehaviour
 {
     // Prefab
     public GameObject adventurerSelector;
-
     public RectTransform content;
 
 
@@ -15,8 +16,8 @@ public class LoadSelector : MonoBehaviour
         foreach (UnitSaveData unitData in SaveManager.Instance.saveFile.hiredAdventurers)
         {
             GameObject newPanel = Instantiate(adventurerSelector, content);
-            newPanel.GetComponent<AdventurerSelectorUI>().LoadFromData(unitData);
-            newPanel.GetComponent<AdventurerSelectorUI>().Setup(unitData);
+            newPanel.GetComponent<SelectorUI>().LoadFromData(unitData);
+            //newPanel.GetComponent<SelectorUI>().Setup(unitData);          // Previous selector funcitonality
         }
     }
 }
