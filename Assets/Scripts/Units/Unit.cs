@@ -8,6 +8,7 @@ using UnityEngine.SocialPlatforms.Impl;
 public abstract class Unit : MonoBehaviour
 {
     [Header("Base Stats")]
+    [SerializeField] protected string unitID;
     [SerializeField] protected string unitName;
 
     [SerializeField] protected int STR; // Strength     - Physical Damage
@@ -37,7 +38,7 @@ public abstract class Unit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        unitID = System.Guid.NewGuid().ToString();
     }
 
     // Update is called once per frame
@@ -60,6 +61,7 @@ public abstract class Unit : MonoBehaviour
     {
         return new UnitSaveData
         {
+            unitID = this.unitID,
             unitName = this.unitName,
             STR = this.STR,
             INT = this.INT,
@@ -79,6 +81,7 @@ public abstract class Unit : MonoBehaviour
     // Apply data from a saved object back onto this unit
     public void LoadFromData(UnitSaveData data)
     {
+        this.unitID = data.unitID;
         this.unitName = data.unitName;
         this.STR = data.STR;
         this.INT = data.INT;
@@ -92,25 +95,6 @@ public abstract class Unit : MonoBehaviour
         this.age = data.age;
         this.spriteID = data.spriteID;
         this.squadNum = data.squadNum;
-
-        CalculateStats();
-    }
-
-    public void ClearData()
-    {
-        this.unitName = " ";
-        this.STR = 0;
-        this.INT = 0;
-        this.DEX = 0;
-        this.WIS = 0;
-        this.VIT = 0;
-        this.END = 0;
-        this.SPI = 0;
-        this.AGI = 0;
-        this.GRO = 0;
-        this.age = 0;
-        this.spriteID = -1;
-        this.squadNum = 0;
 
         CalculateStats();
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class UnitSaveData
 {
+    public string unitID;
     public string unitName;
     public int STR;
     public int INT;

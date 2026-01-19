@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ListingClickHandling : MonoBehaviour, IDragHandler, IBeginDragHandler
+public class ClickDrag : MonoBehaviour, IDragHandler, IBeginDragHandler
 {
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Canvas canvas;

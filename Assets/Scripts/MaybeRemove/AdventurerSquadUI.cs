@@ -43,7 +43,6 @@ public class AdventurerSquadUI : Adventurer
     public void RemoveAdventurerFromSquad()
     {
         image.sprite = defaultImage;
-        ClearData();
     }
 
     public override void RandomizeStats()
