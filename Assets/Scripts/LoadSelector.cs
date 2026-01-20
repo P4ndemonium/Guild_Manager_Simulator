@@ -11,13 +11,21 @@ public class LoadSelector : MonoBehaviour
     public RectTransform content;
 
 
-    void Awake()
+    public void LoadAdventurers()
     {
         foreach (UnitSaveData unitData in SaveManager.Instance.saveFile.hiredAdventurers)
         {
             GameObject newPanel = Instantiate(adventurerSelector, content);
             newPanel.GetComponent<SelectorUI>().LoadFromData(unitData);
             //newPanel.GetComponent<SelectorUI>().Setup(unitData);          // Previous selector funcitonality
+        }
+    }
+
+    public void DeleteAllChildren(Transform parent)
+    {
+        foreach (Transform child in parent)
+        {
+            GameObject.Destroy(child.gameObject);
         }
     }
 }
