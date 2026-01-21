@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyDatabase : MonoBehaviour
 {
-    public List<UnitSaveData> enemyDatabase = new List<UnitSaveData>();
+    public static List<UnitSaveData> enemyDatabase = new List<UnitSaveData>();
 
     public void SaveToJson()
     {

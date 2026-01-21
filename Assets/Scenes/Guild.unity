@@ -5738,7 +5738,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1016954852
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6378,14 +6378,14 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2127051010}
+  - {fileID: 1938723740}
   - {fileID: 1781347053}
   - {fileID: 1448325350}
   - {fileID: 678258226}
   - {fileID: 41755148}
   - {fileID: 1016954852}
   - {fileID: 2067335208}
-  - {fileID: 1938723740}
-  - {fileID: 2127051010}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -7900,133 +7900,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c51adf5bfa287394abfee299fc1cef01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyDatabase:
-  - unitID: enemy_blue_slime
-    unitName: Blue Slime
-    STR: 25
-    INT: 25
-    DEX: 25
-    WIS: 25
-    VIT: 25
-    END: 25
-    SPI: 25
-    AGI: 25
-    GRO: 0
-    age: 0
-    spriteID: 0
-    squadNum: 0
-  - unitID: enemy_green_slime
-    unitName: Green Slime
-    STR: 50
-    INT: 50
-    DEX: 50
-    WIS: 50
-    VIT: 50
-    END: 50
-    SPI: 50
-    AGI: 50
-    GRO: 0
-    age: 0
-    spriteID: 0
-    squadNum: 0
-  - unitID: enemy_red_slime
-    unitName: Red Slime
-    STR: 75
-    INT: 75
-    DEX: 75
-    WIS: 75
-    VIT: 75
-    END: 75
-    SPI: 75
-    AGI: 75
-    GRO: 0
-    age: 0
-    spriteID: 0
-    squadNum: 0
-  - unitID: enemy_goblin_warrior
-    unitName: Goblin Warrior
-    STR: 50
-    INT: 25
-    DEX: 50
-    WIS: 25
-    VIT: 25
-    END: 50
-    SPI: 25
-    AGI: 25
-    GRO: 0
-    age: 0
-    spriteID: 0
-    squadNum: 0
-  - unitID: enemy_goblin_archer
-    unitName: Goblin Archer
-    STR: 50
-    INT: 25
-    DEX: 50
-    WIS: 25
-    VIT: 25
-    END: 25
-    SPI: 25
-    AGI: 50
-    GRO: 0
-    age: 0
-    spriteID: 0
-    squadNum: 0
-  - unitID: enemy_goblin_mage
-    unitName: Goblin mage
-    STR: 25
-    INT: 50
-    DEX: 25
-    WIS: 50
-    VIT: 25
-    END: 25
-    SPI: 50
-    AGI: 25
-    GRO: 0
-    age: 0
-    spriteID: 0
-    squadNum: 0
-  - unitID: enemy_hobgoblin
-    unitName: Hobgoblin
-    STR: 50
-    INT: 25
-    DEX: 50
-    WIS: 25
-    VIT: 50
-    END: 50
-    SPI: 50
-    AGI: 25
-    GRO: 0
-    age: 0
-    spriteID: 0
-    squadNum: 0
-  - unitID: enemy_goblin_shaman
-    unitName: Goblin Shaman
-    STR: 25
-    INT: 75
-    DEX: 25
-    WIS: 75
-    VIT: 25
-    END: 25
-    SPI: 75
-    AGI: 25
-    GRO: 0
-    age: 0
-    spriteID: 0
-    squadNum: 0
-  - unitID: enemy_goblin_king
-    unitName: Goblin King
-    STR: 50
-    INT: 50
-    DEX: 50
-    WIS: 50
-    VIT: 100
-    END: 75
-    SPI: 75
-    AGI: 50
-    GRO: 0
-    age: 0
-    spriteID: 0
-    squadNum: 0
 --- !u!114 &1608054123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10584,10 +10457,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'IT IS THE YEAR 67
-
-
-    3 MORE MONTHS UNTIL NEXT YEAR...'
+  m_text: 'GOLD: 6767'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10614,7 +10484,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 63.8
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -11845,7 +11715,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'GOLD: 6767'
+  m_text: 'IT IS THE YEAR 67
+
+
+    3 MORE MONTHS UNTIL NEXT YEAR...'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11872,7 +11745,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 63.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
