@@ -6,10 +6,11 @@ public class QuestManager : MonoBehaviour
 {
     public static QuestManager Instance;
     public static GameObject enemyPanel;
+    public string encounter;
 
-    public void loadQuest(string quest)
+    public void loadQuest()
     {
-        if (quest == "slime")
+        if (encounter == "Slime")
         {
             float roll = Random.Range(0f, 100f);
 
@@ -26,7 +27,7 @@ public class QuestManager : MonoBehaviour
                 // Spawn red
             }
         }
-        else if (quest == "goblin")
+        else if (encounter == "Goblin")
         {
 
         }

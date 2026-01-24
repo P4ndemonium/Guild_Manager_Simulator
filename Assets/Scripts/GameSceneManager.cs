@@ -24,6 +24,8 @@ public class GameSceneManager : MonoBehaviour
 
     public void EnterCombat()
     {
+        QuestManager.Instance.loadQuest();
+
         // 1. Hide the Guild UI so we don't see it behind the combat
         guildCanvas.SetActive(false);
 
