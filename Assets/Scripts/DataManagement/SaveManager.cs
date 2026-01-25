@@ -68,29 +68,21 @@ public class SaveManager : MonoBehaviour
         Debug.Log("Save data has been reset to empty.");
     }
 
-    public void UpdateUnitInSave(Unit u)
+    public void UpdateUnitInSave(UnitSaveData newData)
     {
         if (saveFile == null) saveFile = new GameSaveFile();
 
-        UnitSaveData newData = u.SaveToData();
-
-        // Find if this unit already exists in the list
         int existingIndex = saveFile.hiredAdventurers.FindIndex(data => data.unitID == newData.unitID);
 
         if (existingIndex != -1)
         {
-            // Overwrite existing data
             saveFile.hiredAdventurers[existingIndex] = newData;
-            Debug.Log($"Updated existing unit: {newData.unitID}");
         }
         else
         {
-            // Add as new entry
             saveFile.hiredAdventurers.Add(newData);
-            Debug.Log($"Added new unit to save: {newData.unitID}");
         }
 
-        // Optional: Auto-save to disk immediately after the update
         SaveToFile();
     }
 

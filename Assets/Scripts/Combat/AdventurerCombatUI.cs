@@ -1,29 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdventurerListingUI : Adventurer
+public class AdventurerCombatUI : Adventurer
 {
-    [Header("UI References")]
-    [SerializeField] protected Image image;
-    [SerializeField] protected TextMeshProUGUI nameText;
-    [SerializeField] protected TextMeshProUGUI statsTextLeft;
-    [SerializeField] protected TextMeshProUGUI statsTextRight;
+    [SerializeField] private Image image;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private Image healthBar;
+    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private TextMeshProUGUI statsTextLeft;
+    [SerializeField] private TextMeshProUGUI statsTextRight;
 
-    // Start is called before the first frame update
     void Start()
     {
-        RandomName();
-        RandomizeStats();
         DisplayStats();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void DisplayStats()
@@ -34,17 +28,18 @@ public class AdventurerListingUI : Adventurer
         {
             nameText.text = unitName;
 
+            healthBar.fillAmount = currentHealth / maxHealth;
+            healthText.text = $"HP: {currentHealth} / {maxHealth}";
+
             statsTextLeft.text = $"STR: {STR}\n" +
                                  $"DEX: {DEX}\n" +
                                  $"VIT: {VIT}\n" +
-                                 $"END: {END}\n" +
-                                 $"GRO: {GRO}";
+                                 $"END: {END}";
 
             statsTextRight.text = $"INT: {INT}\n" +
                                   $"WIS: {WIS}\n" +
                                   $"AGI: {AGI}\n" +
-                                  $"SPI: {SPI}\n" +
-                                  $"age: {age}";
+                                  $"SPI: {SPI}";
         }
     }
 }

@@ -446,6 +446,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 51546201}
+        m_TargetAssemblyTypeName: QuestInformation, Assembly-CSharp
+        m_MethodName: SetEncounter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &51546201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3725,6 +3737,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62193256e45b34d42a63d91e47aa1535, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitTeam: 0
   unitID: 
   unitName: 
   STR: 0
@@ -3743,6 +3756,7 @@ MonoBehaviour:
   currentHealth: 0
   physicalDamage: 0
   magicDamage: 0
+  aggroWeight: 0
   isHired: 0
   library: {fileID: 11400000, guid: 29d2fd83027f26e418f2bed2226c90d2, type: 2}
   givenNames:
@@ -5752,7 +5766,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1016954852
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7817,6 +7831,7 @@ GameObject:
   - component: {fileID: 1608054117}
   - component: {fileID: 1608054123}
   - component: {fileID: 1608054122}
+  - component: {fileID: 1608054124}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -7914,6 +7929,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c51adf5bfa287394abfee299fc1cef01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyDatabase:
+  - unitTeam: 1
+    unitID: enemy_blue_slime
+    unitName: Blue Slime
+    STR: 25
+    INT: 25
+    DEX: 25
+    WIS: 25
+    VIT: 25
+    END: 25
+    SPI: 25
+    AGI: 25
+    GRO: 0
+    age: 0
+    spriteID: 0
+    squadNum: 0
+  - unitTeam: 1
+    unitID: enemy_green_slime
+    unitName: Green Slime
+    STR: 50
+    INT: 50
+    DEX: 50
+    WIS: 50
+    VIT: 50
+    END: 50
+    SPI: 50
+    AGI: 50
+    GRO: 0
+    age: 0
+    spriteID: 0
+    squadNum: 0
+  - unitTeam: 1
+    unitID: enemy_red_slime
+    unitName: Red Slime
+    STR: 75
+    INT: 75
+    DEX: 75
+    WIS: 75
+    VIT: 75
+    END: 75
+    SPI: 75
+    AGI: 75
+    GRO: 0
+    age: 0
+    spriteID: 0
+    squadNum: 0
 --- !u!114 &1608054123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7930,6 +7991,20 @@ MonoBehaviour:
   mainMenuScene: MainMenu
   combatScene: Combat
   listingScene: Listings
+--- !u!114 &1608054124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608054116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3e48bd07ee9acc49b7bd02b146a6427, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedSquadNum: {fileID: 0}
+  encounter: 
 --- !u!1 &1646847790
 GameObject:
   m_ObjectHideFlags: 0
@@ -8217,6 +8292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62193256e45b34d42a63d91e47aa1535, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitTeam: 0
   unitID: 
   unitName: 
   STR: 0
@@ -8235,6 +8311,7 @@ MonoBehaviour:
   currentHealth: 0
   physicalDamage: 0
   magicDamage: 0
+  aggroWeight: 0
   isHired: 0
   library: {fileID: 11400000, guid: 29d2fd83027f26e418f2bed2226c90d2, type: 2}
   givenNames:
@@ -9233,18 +9310,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 41755147}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
       - m_Target: {fileID: 404346235}
         m_TargetAssemblyTypeName: LoadSelector, Assembly-CSharp
         m_MethodName: DeleteAllChildren
@@ -9252,6 +9317,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 404346234}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 41755147}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -10095,6 +10172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62193256e45b34d42a63d91e47aa1535, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitTeam: 0
   unitID: 
   unitName: 
   STR: 0
@@ -10113,6 +10191,7 @@ MonoBehaviour:
   currentHealth: 0
   physicalDamage: 0
   magicDamage: 0
+  aggroWeight: 0
   isHired: 0
   library: {fileID: 11400000, guid: 29d2fd83027f26e418f2bed2226c90d2, type: 2}
   givenNames:

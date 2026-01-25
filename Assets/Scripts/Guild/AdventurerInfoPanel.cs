@@ -79,14 +79,14 @@ public class AdventurerInfoPanel : MonoBehaviour
     {
         currentSelector.IncSquad();
         squadNum.text = currentSelector.SquadNum.ToString("F0");
-        currentSelector.SaveToData();
-        SaveManager.Instance.UpdateUnitInSave(currentSelector);
+        UnitSaveData freshData = currentSelector.SaveToData();
+        SaveManager.Instance.UpdateUnitInSave(freshData);
     }
     public void DownSquad()
     {
         currentSelector.DecSquad();
         squadNum.text = currentSelector.SquadNum.ToString("F0");
-        currentSelector.SaveToData();
-        SaveManager.Instance.UpdateUnitInSave(currentSelector);
+        UnitSaveData freshData = currentSelector.SaveToData();
+        SaveManager.Instance.UpdateUnitInSave(freshData);
     }
 }

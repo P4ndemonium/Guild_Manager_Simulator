@@ -8,6 +8,8 @@ public class Adventurer : Unit
 
     public override void RandomizeStats()
     {
+        unitID = System.Guid.NewGuid().ToString();
+
         STR = Random.Range(1, 101);
         INT = Random.Range(1, 101);
         DEX = Random.Range(1, 101);
@@ -66,6 +68,7 @@ public class Adventurer : Unit
     // Start is called before the first frame update
     void Start()
     {
+        unitTeam = Team.Player;
         RandomName();
         RandomizeStats();
     }

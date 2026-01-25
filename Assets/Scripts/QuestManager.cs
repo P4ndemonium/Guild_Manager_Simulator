@@ -1,14 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class QuestManager : MonoBehaviour
 {
     public static QuestManager Instance;
-    public static GameObject enemyPanel;
+
+    public TextMeshProUGUI selectedSquadNum;
     public string encounter;
 
-    public void loadQuest()
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void LoadQuest()
     {
         if (encounter == "Slime")
         {

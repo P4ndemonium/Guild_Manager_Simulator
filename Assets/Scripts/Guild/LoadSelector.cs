@@ -10,14 +10,20 @@ public class LoadSelector : MonoBehaviour
     public GameObject adventurerSelector;
     public RectTransform content;
 
-
     public void LoadAdventurers()
     {
+        SaveManager.Instance.OnLoadButtonPressed();
+
         foreach (UnitSaveData unitData in SaveManager.Instance.saveFile.hiredAdventurers)
         {
             GameObject newPanel = Instantiate(adventurerSelector, content);
-            newPanel.GetComponent<SelectorUI>().LoadFromData(unitData);
-            //newPanel.GetComponent<SelectorUI>().Setup(unitData);          // Previous selector funcitonality
+
+            if (newPanel.GetComponent<SelectorUI>() != null)
+            {
+                newPanel.GetComponent<SelectorUI>().LoadFromData(unitData);
+            }
+
+            //newPanel.GetComponent<SelectorUI>().Setup(unitData);          // Previous selector functionality
         }
     }
 

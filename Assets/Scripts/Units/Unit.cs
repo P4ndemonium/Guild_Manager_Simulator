@@ -5,8 +5,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
+public enum Team { Player, Enemy }
+
 public abstract class Unit : MonoBehaviour
 {
+    [SerializeField] protected Team unitTeam;
+
     [Header("Base Stats")]
     [SerializeField] protected string unitID;
     [SerializeField] protected string unitName;
@@ -30,15 +34,18 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected float currentHealth;
     [SerializeField] protected float physicalDamage;
     [SerializeField] protected float magicDamage;
+    [SerializeField] protected float aggroWeight;
 
     [SerializeField] protected bool isHired = false;
     // A public way for the SaveManager to check the status
     public bool IsHired => isHired;
 
+    protected bool isDead = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        unitID = System.Guid.NewGuid().ToString();
+
     }
 
     // Update is called once per frame
@@ -54,6 +61,7 @@ public abstract class Unit : MonoBehaviour
         currentHealth = maxHealth;
         physicalDamage = STR / 2;
         magicDamage = INT / 2;
+        aggroWeight = 100;
     }
 
     // Convert this unit's current stats into a data object
@@ -61,6 +69,7 @@ public abstract class Unit : MonoBehaviour
     {
         return new UnitSaveData
         {
+            unitTeam = this.unitTeam,
             unitID = this.unitID,
             unitName = this.unitName,
             STR = this.STR,
@@ -81,6 +90,7 @@ public abstract class Unit : MonoBehaviour
     // Apply data from a saved object back onto this unit
     public void LoadFromData(UnitSaveData data)
     {
+        this.unitTeam = data.unitTeam;
         this.unitID = data.unitID;
         this.unitName = data.unitName;
         this.STR = data.STR;
