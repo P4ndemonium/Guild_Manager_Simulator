@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AdventurerCombatUI : Adventurer
+public class EnemyCombatUI : Enemy
 {
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI nameText;
@@ -21,7 +20,7 @@ public class AdventurerCombatUI : Adventurer
 
     public void DisplayStats()
     {
-        image.sprite = library.allPossibleSprites[spriteID];
+        //image.sprite = library.allPossibleSprites[spriteID]; // undo when enemy sprites are done
 
         if (nameText != null && statsTextLeft != null && statsTextRight != null)
         {

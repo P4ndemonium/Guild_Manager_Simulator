@@ -68,7 +68,7 @@ public class Adventurer : Unit
     // Start is called before the first frame update
     void Start()
     {
-        unitTeam = Team.Player;
+        unitTeam = Team.Adventurer;
         RandomName();
         RandomizeStats();
     }

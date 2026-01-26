@@ -10,7 +10,6 @@ public class Enemy : Unit
     void Start()
     {
         unitTeam = Team.Enemy;
-        RandomizeStats();
     }
 
     // Update is called once per frame
@@ -29,8 +28,6 @@ public class Enemy : Unit
         END = Random.Range(1, END + 1);
         SPI = Random.Range(1, SPI + 1);
         AGI = Random.Range(1, AGI + 1);
-
-        spriteID = Random.Range(0, library.allPossibleSprites.Count);
 
         CalculateStats();
     }

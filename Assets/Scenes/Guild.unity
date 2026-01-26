@@ -3756,8 +3756,11 @@ MonoBehaviour:
   currentHealth: 0
   physicalDamage: 0
   magicDamage: 0
+  outgoingDamage: 0
   aggroWeight: 0
   isHired: 0
+  isDead: 0
+  speed: 0
   library: {fileID: 11400000, guid: 29d2fd83027f26e418f2bed2226c90d2, type: 2}
   givenNames:
   - Akari
@@ -7933,21 +7936,6 @@ MonoBehaviour:
   - unitTeam: 1
     unitID: enemy_blue_slime
     unitName: Blue Slime
-    STR: 25
-    INT: 25
-    DEX: 25
-    WIS: 25
-    VIT: 25
-    END: 25
-    SPI: 25
-    AGI: 25
-    GRO: 0
-    age: 0
-    spriteID: 0
-    squadNum: 0
-  - unitTeam: 1
-    unitID: enemy_green_slime
-    unitName: Green Slime
     STR: 50
     INT: 50
     DEX: 50
@@ -7961,8 +7949,8 @@ MonoBehaviour:
     spriteID: 0
     squadNum: 0
   - unitTeam: 1
-    unitID: enemy_red_slime
-    unitName: Red Slime
+    unitID: enemy_green_slime
+    unitName: Green Slime
     STR: 75
     INT: 75
     DEX: 75
@@ -7971,6 +7959,21 @@ MonoBehaviour:
     END: 75
     SPI: 75
     AGI: 75
+    GRO: 0
+    age: 0
+    spriteID: 0
+    squadNum: 0
+  - unitTeam: 1
+    unitID: enemy_red_slime
+    unitName: Red Slime
+    STR: 100
+    INT: 100
+    DEX: 100
+    WIS: 100
+    VIT: 100
+    END: 100
+    SPI: 100
+    AGI: 100
     GRO: 0
     age: 0
     spriteID: 0
@@ -8311,8 +8314,11 @@ MonoBehaviour:
   currentHealth: 0
   physicalDamage: 0
   magicDamage: 0
+  outgoingDamage: 0
   aggroWeight: 0
   isHired: 0
+  isDead: 0
+  speed: 0
   library: {fileID: 11400000, guid: 29d2fd83027f26e418f2bed2226c90d2, type: 2}
   givenNames:
   - Akari
@@ -10191,8 +10197,11 @@ MonoBehaviour:
   currentHealth: 0
   physicalDamage: 0
   magicDamage: 0
+  outgoingDamage: 0
   aggroWeight: 0
   isHired: 0
+  isDead: 0
+  speed: 0
   library: {fileID: 11400000, guid: 29d2fd83027f26e418f2bed2226c90d2, type: 2}
   givenNames:
   - Akari
@@ -11808,7 +11817,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'IT IS THE YEAR 67
+  m_text: 'GUILD RANK: F
+
+    YEAR: 67
 
 
     3 MORE MONTHS UNTIL NEXT YEAR...'
@@ -11838,7 +11849,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 63.8
+  m_fontSize: 50.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

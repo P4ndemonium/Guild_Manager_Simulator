@@ -21,29 +21,4 @@ public class QuestManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    public void LoadQuest()
-    {
-        if (encounter == "Slime")
-        {
-            float roll = Random.Range(0f, 100f);
-
-            if (roll <= 60f)
-            {
-                // Spawn blue
-            }
-            else if (roll <= 90f) 
-            {
-                // Spawn green
-            }
-            else
-            {
-                // Spawn red
-            }
-        }
-        else if (encounter == "Goblin")
-        {
-
-        }
-    }
 }
