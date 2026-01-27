@@ -57,7 +57,7 @@ public abstract class Unit : MonoBehaviour
     public virtual void RandomizeStats() { }
     public virtual void CalculateStats()
     {
-        maxHealth = VIT * 3;
+        maxHealth = VIT;
         currentHealth = maxHealth;
         physicalDamage = STR / 2;
         magicDamage = INT / 2;

@@ -37,13 +37,13 @@ public class AdventurerListingUI : Adventurer
             statsTextLeft.text = $"STR: {STR}\n" +
                                  $"DEX: {DEX}\n" +
                                  $"VIT: {VIT}\n" +
-                                 $"END: {END}\n" +
+                                 $"SPI: {SPI}\n" +
                                  $"GRO: {GRO}";
 
             statsTextRight.text = $"INT: {INT}\n" +
                                   $"WIS: {WIS}\n" +
+                                  $"END: {END}\n" +
                                   $"AGI: {AGI}\n" +
-                                  $"SPI: {SPI}\n" +
                                   $"age: {age}";
         }
     }

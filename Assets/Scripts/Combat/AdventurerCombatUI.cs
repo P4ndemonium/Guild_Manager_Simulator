@@ -33,12 +33,12 @@ public class AdventurerCombatUI : Adventurer
             statsTextLeft.text = $"STR: {STR}\n" +
                                  $"DEX: {DEX}\n" +
                                  $"VIT: {VIT}\n" +
-                                 $"END: {END}";
+                                 $"SPI: {SPI}";
 
             statsTextRight.text = $"INT: {INT}\n" +
                                   $"WIS: {WIS}\n" +
-                                  $"AGI: {AGI}\n" +
-                                  $"SPI: {SPI}";
+                                  $"END: {END}\n" +
+                                  $"AGI: {AGI}";
         }
     }
 }
