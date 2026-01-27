@@ -7,59 +7,67 @@ public class GameSceneManager : MonoBehaviour
 {
     public static GameSceneManager Instance;
 
-    [SerializeField] private GameObject guildCanvas; // Reference to your Guild UI
-    private string currentLoadedScene;
+    [Header("UI Canvases")]
+    [SerializeField] private GameObject mainMenuCanvas;
+    [SerializeField] private GameObject guildCanvas;
 
     [Header("Scene Names")]
     public string mainMenuScene = "MainMenu";
+    public string guildScene = "Guild";
     public string combatScene = "Combat";
     public string listingScene = "Listings";
 
+    public string currentScene = "MainMenu";
+
     private void Awake()
     {
-        Instance = this;
-        // Start by showing the Main Menu over the Guild
-        //LoadSceneAdditive(mainMenuScene);                  <-- ADD THIS LATER
+        if (Instance == null) { Instance = this; DontDestroyOnLoad(gameObject); }
+        else { Destroy(gameObject); }
     }
 
-    public void EnterCombat()
+    public void EnterGuild()
     {
-        // 1. Hide the Guild UI so we don't see it behind the combat
-        guildCanvas.SetActive(false);
-
-        // 2. Load Combat
-        LoadSceneAdditive(combatScene);
+        mainMenuCanvas.SetActive(false);
+        currentScene = guildScene;
+        SceneManager.LoadScene(guildScene, LoadSceneMode.Additive);
     }
 
-    public void EnterListings()
+    public void EnterListings() // Also in UICommandBridge
     {
-        // 1. Hide the Guild UI so we don't see it behind the combat
-        guildCanvas.SetActive(false);
-
-        // 2. Load Combat
-        LoadSceneAdditive(listingScene);
+        if (guildCanvas != null) guildCanvas.SetActive(false);
+        currentScene = listingScene;
+        SceneManager.LoadScene(listingScene, LoadSceneMode.Additive);
     }
 
-    public void ReturnToGuild()
+    public void EnterCombat() // Also in UICommandBridge
     {
-        // 1. Unload Combat
-        UnloadCurrentScene();
-
-        // 2. Show the Guild UI again
-        guildCanvas.SetActive(true);
+        if (guildCanvas != null) guildCanvas.SetActive(false);
+        currentScene = combatScene;
+        SceneManager.LoadScene(combatScene, LoadSceneMode.Additive);
     }
 
-    private void LoadSceneAdditive(string sceneName)
+    public void UnloadCurrentScene()
     {
-        currentLoadedScene = sceneName;
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
-    }
-
-    private void UnloadCurrentScene()
-    {
-        if (!string.IsNullOrEmpty(currentLoadedScene))
+        if (currentScene == guildScene)
         {
-            SceneManager.UnloadSceneAsync(currentLoadedScene);
+            guildCanvas.SetActive(false);
+            mainMenuCanvas.SetActive(true);
+            currentScene = mainMenuScene;
+            SceneManager.UnloadSceneAsync(guildScene);
+        }
+        else if (currentScene == listingScene)
+        {
+            guildCanvas.SetActive(true);
+            currentScene = guildScene;
+            SceneManager.UnloadSceneAsync(listingScene);
+        }
+        else if (currentScene == combatScene)
+        {
+            guildCanvas.SetActive(true);
+            currentScene = guildScene;
+            SceneManager.UnloadSceneAsync(combatScene);
         }
     }
+
+    public void RegisterGuildCanvas(GameObject canvas) => guildCanvas = canvas;
 }

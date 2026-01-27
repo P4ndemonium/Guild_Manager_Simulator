@@ -4,10 +4,22 @@ using UnityEngine;
 
 public class UICommandBridge : MonoBehaviour
 {
-    public void ClickReturnToGuild()
+    public void ClickUnloadCurrentScene()
     {
         // Because of 'static Instance', any scene can see this!
-        GameSceneManager.Instance.ReturnToGuild();
+        GameSceneManager.Instance.UnloadCurrentScene();
+    }
+
+    public void ClickEnterListings()
+    {
+        // Because of 'static Instance', any scene can see this!
+        GameSceneManager.Instance.EnterListings();
+    }
+
+    public void ClickEnterCombat()
+    {
+        // Because of 'static Instance', any scene can see this!
+        GameSceneManager.Instance.EnterCombat();
     }
 
     public void ClickOnSaveButtonPressed()

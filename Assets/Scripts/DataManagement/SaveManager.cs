@@ -8,6 +8,7 @@ public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance { get; private set; } // The global "hook"
     public GameSaveFile saveFile;
+    public int currentActiveSlot = 1;
 
     private void Awake()
     {
@@ -39,7 +40,7 @@ public class SaveManager : MonoBehaviour
     // Call this to load data back into the scene
     public void OnLoadButtonPressed()
     {
-        string path = Application.persistentDataPath + "/units.json";
+        string path = GetPath(currentActiveSlot);
         if (!File.Exists(path)) return;
 
         string json = File.ReadAllText(path);
@@ -62,7 +63,7 @@ public class SaveManager : MonoBehaviour
         string json = JsonUtility.ToJson(emptyFile, true);
 
         // Overwrite the existing file
-        string path = Application.persistentDataPath + "/units.json";
+        string path = GetPath(currentActiveSlot);
         File.WriteAllText(path, json);
 
         Debug.Log("Save data has been reset to empty.");
@@ -86,12 +87,40 @@ public class SaveManager : MonoBehaviour
         SaveToFile();
     }
 
+    public void ClearCurrentSaveData()
+    {
+        if (saveFile == null)
+        {
+            saveFile = new GameSaveFile();
+            return;
+        }
+
+        // 1. Clear the list of adventurers
+        saveFile.hiredAdventurers.Clear();
+
+        // 2. Reset other data points
+        saveFile.saveTimestamp = "No Save Data";
+
+        // 3. Reset any other variables you have (e.g., Gold, Level, etc.)
+        // saveFile.playerGold = 0;
+
+        Debug.Log("Save file data cleared in memory.");
+    }
+
+    // Helper to get the correct path based on the slot
+    private string GetPath(int slot) => Application.persistentDataPath + "/save_" + slot + ".json";
+
     // Helper method to handle the actual writing to disk
     private void SaveToFile()
     {
         saveFile.saveTimestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         string json = JsonUtility.ToJson(saveFile, true);
-        File.WriteAllText(Application.persistentDataPath + "/units.json", json);
+        File.WriteAllText(GetPath(currentActiveSlot), json);
         Debug.Log("File saved to disk.");
+    }
+
+    public void SetSaveSlot(int slot)
+    {
+        currentActiveSlot = slot;
     }
 }

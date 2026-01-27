@@ -785,8 +785,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1461108874}
-        m_TargetAssemblyTypeName: ReturnToGuildBridge, Assembly-CSharp
-        m_MethodName: ClickReturnToGuild
+        m_TargetAssemblyTypeName: UICommandBridge, Assembly-CSharp
+        m_MethodName: ClickUnloadCurrentScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
