@@ -10,6 +10,7 @@ public class SelectorUI : Adventurer, IPointerClickHandler
     [Header("UI References")]
     [SerializeField] protected Image sImage;
     [SerializeField] protected TextMeshProUGUI sNameText;
+    [SerializeField] protected TextMeshProUGUI sPartyNumText;
 
     public Image SImage => sImage;
     public TextMeshProUGUI SNameText => sNameText;
@@ -25,7 +26,7 @@ public class SelectorUI : Adventurer, IPointerClickHandler
     public int pGRO => GRO;
 
     public int Age => age;
-    public int SquadNum => squadNum;
+    public int PartyNum => partyNum;
 
     void Start()
     {
@@ -36,6 +37,7 @@ public class SelectorUI : Adventurer, IPointerClickHandler
     {
         sImage.sprite = library.allPossibleSprites[spriteID];
         sNameText.text = unitName;
+        sPartyNumText.text = partyNum.ToString();
     }
 
     public void OnPointerClick(PointerEventData eventData)

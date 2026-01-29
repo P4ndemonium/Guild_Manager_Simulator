@@ -29,7 +29,8 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected int age;
 
     [SerializeField] protected int spriteID;
-    [SerializeField] protected int squadNum;
+    [SerializeField] protected int partyNum;
+    [SerializeField] protected int baseStatTotal; public int BaseStatTotal => baseStatTotal;
 
     [SerializeField] protected float maxHealth;
     [SerializeField] protected float currentHealth;
@@ -38,7 +39,8 @@ public abstract class Unit : MonoBehaviour
 
     [SerializeField] protected float outgoingDamage; public float OutgoingDamage => outgoingDamage;
     [SerializeField] protected float aggroWeight; public float AggroWeight => aggroWeight;
-    [SerializeField] protected bool isHired = false; public bool IsHired => isHired;     // A public way for the SaveManager to check the status
+    [SerializeField] protected bool isHired = false; public bool IsHired => isHired;
+    [SerializeField] protected int hiringPrice; public int HiringPrice => hiringPrice;
     [SerializeField] protected bool isDead = false; public bool IsDead => isDead;
     [SerializeField] protected float speed; public float Speed => speed;
 
@@ -84,7 +86,7 @@ public abstract class Unit : MonoBehaviour
             GRO = this.GRO,
             age = this.age,
             spriteID = this.spriteID,
-            squadNum = this.squadNum
+            partyNum = this.partyNum
         };
     }
 
@@ -105,31 +107,25 @@ public abstract class Unit : MonoBehaviour
         this.GRO = data.GRO;
         this.age = data.age;
         this.spriteID = data.spriteID;
-        this.squadNum = data.squadNum;
+        this.partyNum = data.partyNum;
 
         CalculateStats();
     }
 
-    public void IncSquad()
+    public void IncParty()
     {
-        squadNum += 1;
+        partyNum += 1;
     }
-    public void DecSquad()
+    public void DecParty()
     {
-        squadNum -= 1;
+        partyNum -= 1;
     }
 
     // Combat
     public virtual void Attack(Unit target)
     {
-        // Damage Reduction Calculation
-        string damageType = GetDamageType();
-        if (damageType == "physical")
-            CalculateOutgoingDamage(STR, target.P_END, 80f);
-        else
-            CalculateOutgoingDamage(INT, target.P_SPI, 80f);
-
-        target.TakeDamage(outgoingDamage);
+        // Start the visual "Lunge" toward the target
+        StartCoroutine(LungeAttack(target));
     }
 
     public virtual void TakeDamage(float amount)
@@ -158,5 +154,49 @@ public abstract class Unit : MonoBehaviour
         float cappedDamage = STR * (1 - (reduction_cap / 100));
         if (intendedDamage > cappedDamage) outgoingDamage = intendedDamage;
         else outgoingDamage = cappedDamage;
+    }
+
+    private IEnumerator LungeAttack(Unit target)
+    {
+        Vector3 startPos = transform.position;
+        Vector3 targetPos = target.transform.position;
+
+        // 1. Lunge Forward (Move 30% of the way to the target)
+        Vector3 lungeDestination = Vector3.Lerp(startPos, targetPos, 0.9f);
+        float elapsedTime = 0f;
+        float duration = 0.15f; // Fast lunge
+
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(startPos, lungeDestination, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // --- HIT POINT ---
+        // This is where the actual damage happens (mid-animation)
+        ExecuteDamageLogic(target);
+
+        // 2. Return to Original Position
+        elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(lungeDestination, startPos, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = startPos; // Ensure we are exactly back at home
+    }
+
+    private void ExecuteDamageLogic(Unit target)
+    {
+        string damageType = GetDamageType();
+        if (damageType == "physical")
+            CalculateOutgoingDamage(STR, target.P_END, 80f);
+        else
+            CalculateOutgoingDamage(INT, target.P_SPI, 80f);
+
+        target.TakeDamage(outgoingDamage);
     }
 }

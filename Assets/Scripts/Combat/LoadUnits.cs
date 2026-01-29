@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 using System.Linq;
+using UnityEngine.UI;
 
 public class LoadUnits : MonoBehaviour
 {
@@ -22,19 +23,24 @@ public class LoadUnits : MonoBehaviour
 
         foreach (UnitSaveData unitData in SaveManager.Instance.saveFile.hiredAdventurers)
         {
-            GameObject newPanel = Instantiate(unitPanel, parent);
-
-            if (newPanel.GetComponent<AdventurerCombatUI>() != null)
+            if (unitData.partyNum == QuestManager.Instance.selectedPartyNum)
             {
-                newPanel.GetComponent<AdventurerCombatUI>().LoadFromData(unitData);
+                GameObject newPanel = Instantiate(unitPanel, parent, false);
+
+                if (newPanel.GetComponent<AdventurerCombatUI>() != null)
+                {
+                    newPanel.GetComponent<AdventurerCombatUI>().LoadFromData(unitData);
+                }
             }
         }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(parent); // for bug where unit spawns off screen/layout
     }
 
     public void LoadEnemies()
     {
         int roll = Random.Range(3, 6); // 3 - 5 inclusive
         for (int i = 0; i < roll; i++) SpawnRandomEnemy(QuestManager.Instance.encounter);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(parent); // for bug where unit spawns off screen/layout
     }
 
     public void SpawnRandomEnemy(string encounterType)

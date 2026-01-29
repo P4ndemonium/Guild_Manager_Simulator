@@ -11,6 +11,8 @@ public class AdventurerListingUI : Adventurer
     [SerializeField] protected TextMeshProUGUI nameText;
     [SerializeField] protected TextMeshProUGUI statsTextLeft;
     [SerializeField] protected TextMeshProUGUI statsTextRight;
+    [SerializeField] protected TextMeshProUGUI priceText;
+
 
     // Start is called before the first frame update
     void Start()
@@ -18,12 +20,6 @@ public class AdventurerListingUI : Adventurer
         RandomName();
         RandomizeStats();
         DisplayStats();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void DisplayStats()
@@ -45,6 +41,17 @@ public class AdventurerListingUI : Adventurer
                                   $"END: {END}\n" +
                                   $"AGI: {AGI}\n" +
                                   $"age: {age}";
+        }
+
+        priceText.text = hiringPrice.ToString("F0");
+    }
+
+    public void Hire()
+    {
+        if (!IsHired && ProgressManager.Instance.gold >= HiringPrice)
+        {
+            ProgressManager.Instance.gold -= HiringPrice;
+            isHired = true;
         }
     }
 }

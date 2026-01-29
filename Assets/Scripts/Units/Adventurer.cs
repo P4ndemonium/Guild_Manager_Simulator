@@ -22,9 +22,10 @@ public class Adventurer : Unit
         GRO = Random.Range(1, 101);
         age = Random.Range(17, 31);
 
-        Debug.Log("Sprite count: " + library.allPossibleSprites.Count);
         spriteID = Random.Range(0, library.allPossibleSprites.Count);
-        squadNum = 0;
+        partyNum = 0;
+        baseStatTotal = STR + INT + DEX + WIS + VIT + END + SPI + AGI;
+        hiringPrice = ((baseStatTotal / 8) + Random.Range(0, 100));
 
         CalculateStats();
     }
@@ -71,16 +72,5 @@ public class Adventurer : Unit
         unitTeam = Team.Adventurer;
         RandomName();
         RandomizeStats();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void Hire()
-    {
-        isHired = true;
     }
 }

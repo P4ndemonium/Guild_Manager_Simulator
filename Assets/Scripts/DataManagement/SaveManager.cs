@@ -19,7 +19,6 @@ public class SaveManager : MonoBehaviour
     // Call this to save the current state to a file
     public void OnSaveButtonPressed()
     {
-        //GameSaveFile saveFile = new GameSaveFile();
         Unit[] units = FindObjectsOfType<Unit>();
 
         foreach (Unit u in units)
@@ -111,16 +110,90 @@ public class SaveManager : MonoBehaviour
     private string GetPath(int slot) => Application.persistentDataPath + "/save_" + slot + ".json";
 
     // Helper method to handle the actual writing to disk
-    private void SaveToFile()
+    public void SaveToFile()
     {
+        // Fix 1: Ensure saveFile actually exists in memory
+        if (saveFile == null)
+        {
+            saveFile = new GameSaveFile();
+        }
+
         saveFile.saveTimestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+        // Fix 2: Safety check for ProgressManager
+        if (ProgressManager.Instance != null)
+        {
+            saveFile.gold = ProgressManager.Instance.gold;
+        }
+        else
+        {
+            Debug.LogError("SaveManager: ProgressManager.Instance is null! Cannot save gold.");
+        }
+
         string json = JsonUtility.ToJson(saveFile, true);
         File.WriteAllText(GetPath(currentActiveSlot), json);
-        Debug.Log("File saved to disk.");
     }
 
     public void SetSaveSlot(int slot)
     {
         currentActiveSlot = slot;
+    }
+
+    public void LoadProgress() // Currently only gold loaded, add guildrank, guildrankprogress, etc. later
+    {
+        string path = GetPath(currentActiveSlot);
+
+        if (File.Exists(path))
+        {
+            // 1. Read the file
+            string json = File.ReadAllText(path);
+
+            // 2. Parse it into a temporary object
+            GameSaveFile tempSave = JsonUtility.FromJson<GameSaveFile>(json);
+
+            // 3. Only apply the gold value to your game manager
+            if (ProgressManager.Instance != null)
+            {
+                ProgressManager.Instance.gold = tempSave.gold;
+
+                GoldUI ui = FindFirstObjectByType<GoldUI>();
+                if (ui != null) ui.UpdateGoldText();
+
+                Debug.Log("Gold loaded: " + tempSave.gold);
+            }
+        }
+        else
+        {
+            // NEW SAVE FILE LOGIC: 
+            // If no file exists, set the default starting gold
+            if (ProgressManager.Instance != null)
+            {
+                ProgressManager.Instance.gold = 1000; // Your starting amount
+                Debug.Log("No save found. Starting gold set to 1000.");
+            }
+        }
+    }
+
+    public void DeleteSaveFile(int slot)
+    {
+        string path = GetPath(slot);
+
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+
+            // Optional: If the deleted file was the one currently loaded in memory, 
+            // reset the local saveFile object so you don't accidentally save old data back out.
+            if (slot == currentActiveSlot)
+            {
+                saveFile = new GameSaveFile();
+            }
+
+            Debug.Log($"Save file in slot {slot} has been deleted.");
+        }
+        else
+        {
+            Debug.LogWarning($"Attempted to delete save in slot {slot}, but no file exists at: {path}");
+        }
     }
 }

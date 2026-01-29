@@ -1076,8 +1076,9 @@ GameObject:
   - component: {fileID: 218920307}
   - component: {fileID: 218920309}
   - component: {fileID: 218920308}
+  - component: {fileID: 218920310}
   m_Layer: 5
-  m_Name: SquadNumberText
+  m_Name: PartyNumberText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1122,7 +1123,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1199,6 +1200,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 218920306}
   m_CullTransparentMesh: 1
+--- !u!114 &218920310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218920306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 734854ea271867443a39288940062064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &254462037
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,7 +1224,7 @@ GameObject:
   - component: {fileID: 254462040}
   - component: {fileID: 254462039}
   m_Layer: 5
-  m_Name: SquadNumberText
+  m_Name: PartyNumberText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1782,7 +1795,7 @@ GameObject:
   - component: {fileID: 439787215}
   - component: {fileID: 439787214}
   m_Layer: 5
-  m_Name: ButtonSquadLeft
+  m_Name: PartyLeftButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1854,7 +1867,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1040769351}
         m_TargetAssemblyTypeName: AdventurerInfoPanel, Assembly-CSharp
-        m_MethodName: DownSquad
+        m_MethodName: DownParty
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2369,8 +2382,9 @@ GameObject:
   - component: {fileID: 498907120}
   - component: {fileID: 498907119}
   - component: {fileID: 498907118}
+  - component: {fileID: 498907121}
   m_Layer: 5
-  m_Name: ButtonSquadRight
+  m_Name: PartyRightButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2440,9 +2454,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1040769351}
-        m_TargetAssemblyTypeName: AdventurerInfoPanel, Assembly-CSharp
-        m_MethodName: UpSquad
+      - m_Target: {fileID: 498907121}
+        m_TargetAssemblyTypeName: UICommandBridge, Assembly-CSharp
+        m_MethodName: ClickIncSelectedParty
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2490,6 +2504,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 498907116}
   m_CullTransparentMesh: 1
+--- !u!114 &498907121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498907116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0983676f427eea40badfdbafc5a6db6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &500768081
 GameObject:
   m_ObjectHideFlags: 0
@@ -2882,9 +2908,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1016954852}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1200, y: 625}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -100, y: -100}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &632034245
@@ -3764,7 +3790,8 @@ MonoBehaviour:
   GRO: 0
   age: 0
   spriteID: 0
-  squadNum: 0
+  partyNum: 0
+  baseStatTotal: 0
   maxHealth: 0
   currentHealth: 0
   physicalDamage: 0
@@ -3772,6 +3799,7 @@ MonoBehaviour:
   outgoingDamage: 0
   aggroWeight: 0
   isHired: 0
+  hiringPrice: 0
   isDead: 0
   speed: 0
   library: {fileID: 11400000, guid: 29d2fd83027f26e418f2bed2226c90d2, type: 2}
@@ -5323,7 +5351,7 @@ MonoBehaviour:
   m_text: 'Accept quest?
 
 
-    Send squad:'
+    Send party:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5970,8 +5998,8 @@ MonoBehaviour:
   GROBar: {fileID: 532471729}
   ageText: {fileID: 1977087854}
   panelRoot: {fileID: 1040769347}
-  maxValue: 200
-  squadNum: {fileID: 254462039}
+  maxValue: 250
+  partyNumText: {fileID: 254462039}
 --- !u!1 &1057431743
 GameObject:
   m_ObjectHideFlags: 0
@@ -6608,8 +6636,9 @@ GameObject:
   - component: {fileID: 1311324893}
   - component: {fileID: 1311324892}
   - component: {fileID: 1311324891}
+  - component: {fileID: 1311324894}
   m_Layer: 5
-  m_Name: ButtonSquadLeft
+  m_Name: PartyLeftButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6679,9 +6708,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1040769351}
-        m_TargetAssemblyTypeName: AdventurerInfoPanel, Assembly-CSharp
-        m_MethodName: DownSquad
+      - m_Target: {fileID: 1311324894}
+        m_TargetAssemblyTypeName: UICommandBridge, Assembly-CSharp
+        m_MethodName: ClickDecSelectedParty
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6729,6 +6758,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1311324889}
   m_CullTransparentMesh: 1
+--- !u!114 &1311324894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311324889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0983676f427eea40badfdbafc5a6db6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1350329595
 GameObject:
   m_ObjectHideFlags: 0
@@ -7447,7 +7488,7 @@ GameObject:
   - component: {fileID: 1445384356}
   - component: {fileID: 1445384355}
   m_Layer: 5
-  m_Name: ButtonSquadRight
+  m_Name: PartyRightButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7519,7 +7560,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1040769351}
         m_TargetAssemblyTypeName: AdventurerInfoPanel, Assembly-CSharp
-        m_MethodName: UpSquad
+        m_MethodName: UpParty
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8028,6 +8069,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveFile:
     saveTimestamp: 
+    gold: 0
     hiredAdventurers: []
   currentActiveSlot: 1
 --- !u!114 &1608054118
@@ -8120,7 +8162,7 @@ MonoBehaviour:
     GRO: 0
     age: 0
     spriteID: 0
-    squadNum: 0
+    partyNum: 0
   - unitTeam: 1
     unitID: enemy_green_slime
     unitName: Green Slime
@@ -8135,7 +8177,7 @@ MonoBehaviour:
     GRO: 0
     age: 0
     spriteID: 0
-    squadNum: 0
+    partyNum: 0
   - unitTeam: 1
     unitID: enemy_red_slime
     unitName: Red Slime
@@ -8150,7 +8192,7 @@ MonoBehaviour:
     GRO: 0
     age: 0
     spriteID: 0
-    squadNum: 0
+    partyNum: 0
 --- !u!114 &1608054123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8182,7 +8224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3e48bd07ee9acc49b7bd02b146a6427, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedSquadNum: {fileID: 0}
+  selectedPartyNum: 1
+  selectedPartyNumText: {fileID: 0}
   encounter: 
 --- !u!1 &1646847790
 GameObject:
@@ -8510,7 +8553,8 @@ MonoBehaviour:
   GRO: 0
   age: 0
   spriteID: 0
-  squadNum: 0
+  partyNum: 0
+  baseStatTotal: 0
   maxHealth: 0
   currentHealth: 0
   physicalDamage: 0
@@ -8518,6 +8562,7 @@ MonoBehaviour:
   outgoingDamage: 0
   aggroWeight: 0
   isHired: 0
+  hiringPrice: 0
   isDead: 0
   speed: 0
   library: {fileID: 11400000, guid: 29d2fd83027f26e418f2bed2226c90d2, type: 2}
@@ -10393,7 +10438,8 @@ MonoBehaviour:
   GRO: 0
   age: 0
   spriteID: 0
-  squadNum: 0
+  partyNum: 0
+  baseStatTotal: 0
   maxHealth: 0
   currentHealth: 0
   physicalDamage: 0
@@ -10401,6 +10447,7 @@ MonoBehaviour:
   outgoingDamage: 0
   aggroWeight: 0
   isHired: 0
+  hiringPrice: 0
   isDead: 0
   speed: 0
   library: {fileID: 11400000, guid: 29d2fd83027f26e418f2bed2226c90d2, type: 2}
@@ -10714,8 +10761,9 @@ GameObject:
   - component: {fileID: 1938723740}
   - component: {fileID: 1938723742}
   - component: {fileID: 1938723741}
+  - component: {fileID: 1938723743}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: GoldText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10737,8 +10785,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -877.5, y: 574.2483}
-  m_SizeDelta: {x: 805, y: 291.5034}
+  m_AnchoredPosition: {x: -877.5, y: 560}
+  m_SizeDelta: {x: 800, y: 320}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1938723741
 MonoBehaviour:
@@ -10760,15 +10808,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'GOLD: 6767
-
-    GUILD RANK: F
-
-    YEAR: 67
-
-
-    3 MORE MONTHS UNTIL
-    NEXT YEAR...'
+  m_text: 'Gold: '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10777,8 +10817,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4286638847
+  m_fontColor: {r: 1, g: 0.91729563, b: 0.50377357, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -10795,7 +10835,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.05
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -10845,6 +10885,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1938723739}
   m_CullTransparentMesh: 1
+--- !u!114 &1938723743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938723739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bf030bb3a24b8149ab7a1d80682b59f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goldText: {fileID: 1938723741}
 --- !u!1 &1940845279
 GameObject:
   m_ObjectHideFlags: 0
@@ -11847,7 +11900,7 @@ GameObject:
   - component: {fileID: 2110932191}
   - component: {fileID: 2110932190}
   m_Layer: 5
-  m_Name: SquadText
+  m_Name: PartyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11892,7 +11945,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Squad:'
+  m_text: 'Party:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

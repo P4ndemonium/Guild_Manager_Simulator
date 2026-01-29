@@ -67,6 +67,10 @@ public class GameSceneManager : MonoBehaviour
             currentScene = guildScene;
             SceneManager.UnloadSceneAsync(combatScene);
         }
+
+        // Update progress after
+        GoldUI ui = FindFirstObjectByType<GoldUI>();
+        if (ui != null) ui.UpdateGoldText();
     }
 
     public void RegisterGuildCanvas(GameObject canvas) => guildCanvas = canvas;

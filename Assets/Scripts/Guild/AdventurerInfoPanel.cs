@@ -33,8 +33,8 @@ public class AdventurerInfoPanel : MonoBehaviour
     public TextMeshProUGUI ageText;
 
     public GameObject panelRoot; // The actual UI Panel object to show/hide
-    public float maxValue = 200f;
-    public TextMeshProUGUI squadNum;
+    public float maxValue = 250f;
+    public TextMeshProUGUI partyNumText;
     private SelectorUI currentSelector;
 
     void Awake()
@@ -72,20 +72,24 @@ public class AdventurerInfoPanel : MonoBehaviour
 
         ageText.text = "Age: " + data.Age.ToString("F0");
 
-        squadNum.text = data.SquadNum.ToString("F0");
+        partyNumText.text = data.PartyNum.ToString("F0");
     }
 
-    public void UpSquad()
+    public void UpParty()
     {
-        currentSelector.IncSquad();
-        squadNum.text = currentSelector.SquadNum.ToString("F0");
-        UnitSaveData freshData = currentSelector.SaveToData();
-        SaveManager.Instance.UpdateUnitInSave(freshData);
+        currentSelector.IncParty();
+        PartyHelper();
     }
-    public void DownSquad()
+    public void DownParty()
     {
-        currentSelector.DecSquad();
-        squadNum.text = currentSelector.SquadNum.ToString("F0");
+        currentSelector.DecParty();
+        PartyHelper();
+    }
+
+    public void PartyHelper()
+    {
+        partyNumText.text = currentSelector.PartyNum.ToString("F0");
+        currentSelector.DisplaySelector();
         UnitSaveData freshData = currentSelector.SaveToData();
         SaveManager.Instance.UpdateUnitInSave(freshData);
     }
