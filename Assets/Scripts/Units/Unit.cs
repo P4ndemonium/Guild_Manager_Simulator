@@ -28,7 +28,8 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected int GRO; // Growth       - Rate of improvement or reduction of stats      # Maybe make it change every year and reduce as age goes by
     [SerializeField] protected int age;
 
-    [SerializeField] protected int spriteID;
+    [SerializeField] protected AllSpritesLibrary library; public AllSpritesLibrary Library => library;
+    [SerializeField] protected int spriteID; public int SpriteID => spriteID;
     [SerializeField] protected int partyNum;
     [SerializeField] protected int baseStatTotal; public int BaseStatTotal => baseStatTotal;
 
@@ -42,7 +43,9 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected bool isHired = false; public bool IsHired => isHired;
     [SerializeField] protected int hiringPrice; public int HiringPrice => hiringPrice;
     [SerializeField] protected bool isDead = false; public bool IsDead => isDead;
-    [SerializeField] protected float speed; public float Speed => speed;
+    [SerializeField] protected int speed; 
+    [SerializeField] protected int actionCost; public int ActionCost => actionCost;
+    [SerializeField] public int nextActionTime; // The 'timestamp' for their next turn
 
     // Start is called before the first frame update
     void Start()
@@ -63,8 +66,12 @@ public abstract class Unit : MonoBehaviour
         currentHealth = maxHealth;
         physicalDamage = STR / 2;
         magicDamage = INT / 2;
+
         aggroWeight = 100;
-        speed = AGI;
+
+        speed = AGI + 300;
+        actionCost = 1000 - speed;
+        if (actionCost < 100) actionCost = 100;
     }
 
     // Convert this unit's current stats into a data object
@@ -122,15 +129,11 @@ public abstract class Unit : MonoBehaviour
     }
 
     // Combat
-    public virtual void Attack(Unit target)
-    {
-        // Start the visual "Lunge" toward the target
-        StartCoroutine(LungeAttack(target));
-    }
-
     public virtual void TakeDamage(float amount)
     {
         currentHealth -= amount;
+
+        RefreshMyUI();
 
         if (currentHealth <= 0) Die();
     }
@@ -150,18 +153,18 @@ public abstract class Unit : MonoBehaviour
 
     public virtual void CalculateOutgoingDamage(float damage, float reduction, float reduction_cap)
     {
-        float intendedDamage = STR * (1 - (reduction / 100));
-        float cappedDamage = STR * (1 - (reduction_cap / 100));
+        float intendedDamage = damage * (1 - (reduction / 100));
+        float cappedDamage = damage * (1 - (reduction_cap / 100));
         if (intendedDamage > cappedDamage) outgoingDamage = intendedDamage;
         else outgoingDamage = cappedDamage;
     }
 
-    private IEnumerator LungeAttack(Unit target)
+    public virtual IEnumerator Attack(Unit target)
     {
         Vector3 startPos = transform.position;
         Vector3 targetPos = target.transform.position;
 
-        // 1. Lunge Forward (Move 30% of the way to the target)
+        // 1. Lunge Forward (Move 90% of the way to the target)
         Vector3 lungeDestination = Vector3.Lerp(startPos, targetPos, 0.9f);
         float elapsedTime = 0f;
         float duration = 0.15f; // Fast lunge
@@ -192,11 +195,20 @@ public abstract class Unit : MonoBehaviour
     private void ExecuteDamageLogic(Unit target)
     {
         string damageType = GetDamageType();
+
         if (damageType == "physical")
-            CalculateOutgoingDamage(STR, target.P_END, 80f);
-        else
-            CalculateOutgoingDamage(INT, target.P_SPI, 80f);
+            CalculateOutgoingDamage(physicalDamage, target.P_END, 80);
+        else if (damageType == "magic")
+            CalculateOutgoingDamage(magicDamage, target.P_SPI, 80);
 
         target.TakeDamage(outgoingDamage);
+    }
+
+    private void RefreshMyUI()
+    {
+        if (unitTeam == Team.Adventurer)
+            GetComponent<AdventurerCombatUI>()?.DisplayStats();
+        else
+            GetComponent<EnemyCombatUI>()?.DisplayStats();
     }
 }

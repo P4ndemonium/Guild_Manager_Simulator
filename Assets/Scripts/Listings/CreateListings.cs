@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class CreateListings : MonoBehaviour
 {
-    public GameObject adventurerListing;
+    public GameObject prefab;
     public RectTransform canvas;
+    public RectTransform parent;
     public int spawnCount;
 
     void Start()
@@ -19,7 +20,7 @@ public class CreateListings : MonoBehaviour
 
         for (int i = 0; i < spawnCount; i++)
         {
-            GameObject newPanel = Instantiate(adventurerListing, canvas);
+            GameObject newPanel = Instantiate(prefab, parent);
             RectTransform panelRT = newPanel.GetComponent<RectTransform>();
 
             // Calculate safe boundaries

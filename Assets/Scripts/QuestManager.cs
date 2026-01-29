@@ -10,6 +10,7 @@ public class QuestManager : MonoBehaviour
     public int selectedPartyNum = 1;
     public TextMeshProUGUI selectedPartyNumText;
     public string encounter;
+    public int questReward;
 
     private void Awake()
     {

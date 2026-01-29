@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using static UnityEngine.GraphicsBuffer;
+using TMPro;
 
 public class CombatManager : MonoBehaviour
 {
+    public TurnOrderUI turnOrderUI;
+    public GameObject endPanel;
+    public TextMeshProUGUI endText;
+
     public int turnNum;
     public List<Unit> adventurers = new List<Unit>();
     public List<Unit> enemies = new List<Unit>();
@@ -19,42 +24,50 @@ public class CombatManager : MonoBehaviour
         StartCoroutine(BattleRoutine());
     }
 
-    void CreateInitiativeOrder()
+    // ================================================================
+    // TURN LOGIC
+    // ================================================================
+
+    IEnumerator BattleRoutine()
     {
+        yield return new WaitForEndOfFrame();
+
+        // 1. Initial Setup: Set everyone's first turn time based on their cost
         allUnitsInBattle.Clear();
         allUnitsInBattle.AddRange(adventurers);
         allUnitsInBattle.AddRange(enemies);
 
-        // Optional: Sort by a "Speed" variable if you have one
-        allUnitsInBattle = allUnitsInBattle.OrderByDescending(u => u.Speed).ToList();
-    }
+        foreach (Unit u in allUnitsInBattle)
+        {
+            u.nextActionTime = u.ActionCost;
+        }
 
-    IEnumerator BattleRoutine()
-    {
         while (adventurers.Count > 0 && enemies.Count > 0)
         {
-            turnNum++;
-            Debug.Log($"<color=yellow>--- Starting Round {turnNum} ---</color>");
+            // 2. Find the unit whose nextActionTime is the SMALLEST
+            // We filter out nulls or dead units just in case
+            Unit nextUnit = allUnitsInBattle
+                .Where(u => u != null && !u.IsDead)
+                .OrderBy(u => u.nextActionTime)
+                .FirstOrDefault();
 
-            // Determine who goes in what order this round
-            CreateInitiativeOrder();
+            if (nextUnit == null) break;
 
-            foreach (Unit unit in allUnitsInBattle)
-            {
-                if (adventurers.Count == 0 || enemies.Count == 0) break; // Re-check: Did the battle end mid-round?
-                if (unit == null || unit.IsDead) continue;               // Skip dead units
+            // 3. Let that unit take their turn
+            if (nextUnit.UnitTeam == Team.Adventurer)
+                yield return StartCoroutine(HandleUnitTurn(nextUnit, enemies, adventurers));
+            else
+                yield return StartCoroutine(HandleUnitTurn(nextUnit, adventurers, enemies));
 
-                if (unit.UnitTeam == Team.Adventurer)
-                {
-                    yield return StartCoroutine(HandleUnitTurn(unit, enemies, adventurers));
-                }
-                else
-                {
-                    yield return StartCoroutine(HandleUnitTurn(unit, adventurers, enemies));
-                }
-            }
+            // 4. Update the unit's next action time based on their cost
+            // This pushes them further down the timeline
+            nextUnit.nextActionTime += nextUnit.ActionCost;
 
-            yield return new WaitForSeconds(0.5f); // Brief pause between rounds
+            // Re-update UI after the action in case someone died
+            // turnOrderUI.UpdateDisplay(allUnitsInBattle);
+
+            // Optional: If the numbers get too high (e.g. 1,000,000), 
+            // you can subtract the lowest timestamp from everyone to keep them small.
         }
     }
 
@@ -64,8 +77,9 @@ public class CombatManager : MonoBehaviour
 
         if (target != null)
         {
-            attacker.Attack(target);
+            yield return StartCoroutine(attacker.Attack(target));
             Debug.Log($"<color=green>--- {attacker.UnitName} ({attacker.UnitTeam}) attacks {target.UnitName} ({target.UnitTeam}) for {attacker.OutgoingDamage} damage ---</color>");
+            //UpdateAllUnitStats();
 
             if (target.IsDead)
             {
@@ -74,9 +88,13 @@ public class CombatManager : MonoBehaviour
                 // We don't necessarily Destroy immediately if you want a death animation
                 Destroy(target.gameObject, 0.5f);
             }
-        }
 
-        UpdateAllUnitStats();
+            if (CheckForBattleEnd())
+            {
+                StopAllCoroutines(); // Stop the battle loop immediately
+                yield break;
+            }
+        }
 
         yield return new WaitForSeconds(2f); // Time for the player to see the action
     }
@@ -106,15 +124,57 @@ public class CombatManager : MonoBehaviour
         return potentialTargets[0]; // Fallback
     }
 
-    public void UpdateAllUnitStats()
+    // ================================================================
+    // END OF COMBAT
+    // ================================================================
+
+    private bool CheckForBattleEnd()
     {
-        foreach (Unit unit in allUnitsInBattle)
+        // Check if all adventurers are dead or the list is empty
+        bool adventurersWiped = adventurers.Count == 0 || adventurers.All(u => u.IsDead);
+
+        // Check if all enemies are dead or the list is empty
+        bool enemiesWiped = enemies.Count == 0 || enemies.All(u => u.IsDead);
+
+        if (adventurersWiped)
         {
-            if (!unit.IsDead)
-            {
-                if (unit.UnitTeam == Team.Adventurer) unit.gameObject.GetComponent<AdventurerCombatUI>().DisplayStats();
-                else unit.gameObject.GetComponent<EnemyCombatUI>().DisplayStats();
-            }
+            Debug.Log("<color=red>DEFEAT! All adventurers have fallen.</color>");
+            EndBattle(Team.Enemy); // Create this method to handle the UI
+            return true;
         }
+
+        if (enemiesWiped)
+        {
+            Debug.Log("<color=green>VICTORY! All enemies defeated.</color>");
+            EndBattle(Team.Adventurer);
+            return true;
+        }
+
+        return false;
+    }
+
+    void EndBattle(Team winner)
+    {
+        endPanel.SetActive(true);
+        if (winner == Team.Adventurer)
+        {
+            endText.text = $"VICTORY!!! Your party WON!!!\n\n" +
+                $"Gold received: {QuestManager.Instance.questReward}\n\n" +
+                $"Survivng members: {GetSurvivorList()}";
+            ProgressManager.Instance.gold += QuestManager.Instance.questReward;
+        }
+        else
+        {
+            endText.text = $"Your party was wiped out...";
+        }
+    }
+
+    public string GetSurvivorList()
+    {
+        var survivorStrings = adventurers
+            .Where(u => u != null && !u.IsDead)
+            .Select(u => $"{u.UnitName}");
+
+        return string.Join(", ", survivorStrings);
     }
 }

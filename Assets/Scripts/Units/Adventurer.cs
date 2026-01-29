@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Adventurer : Unit
 {
-    [SerializeField] protected AllSpritesLibrary library;
-
     public override void RandomizeStats()
     {
         unitID = System.Guid.NewGuid().ToString();

@@ -5,8 +5,12 @@ using UnityEngine;
 public class ProgressManager : MonoBehaviour
 {
     public static ProgressManager Instance;
-    public string guildRank;
+    public enum GuildRank { S, A, B, C, D, E, F }
+    public GuildRank guildRank;
     public int guildRankProgress;
+    public int year;
+    public int month;
+    public int week;
 
     // ================================================================
     // AUTO UPDATES UI IF GOLD CHANGES ANYWHERE
@@ -28,5 +32,10 @@ public class ProgressManager : MonoBehaviour
     {
         if (Instance == null) { Instance = this; }
         else { Destroy(gameObject); }
+    }
+
+    private void Start()
+    {
+        guildRank = GuildRank.F;
     }
 }

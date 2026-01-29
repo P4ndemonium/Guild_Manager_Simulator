@@ -48,13 +48,17 @@ public class LoadUnits : MonoBehaviour
         float roll = Random.Range(0f, 100f);
         if (encounterType == "Slime")
         {
-            if (roll <= 60f) FindAndInstantiateEnemy("enemy_blue_slime");
-            else if (roll <= 90f) FindAndInstantiateEnemy("enemy_green_slime");
-            else FindAndInstantiateEnemy("enemy_red_slime");
+            if (roll <= 60f) FindAndInstantiateEnemy("enemy_blue_slime");       // 60%
+            else if (roll <= 90f) FindAndInstantiateEnemy("enemy_green_slime"); // 30%
+            else FindAndInstantiateEnemy("enemy_red_slime");                    // 10%
         }
         else if (encounterType == "Goblin")
         {
-
+            if (roll <= 30f) FindAndInstantiateEnemy("enemy_goblin");              // 30%
+            else if (roll <= 55f) FindAndInstantiateEnemy("enemy_goblin_warrior"); // 25%
+            else if (roll <= 80f) FindAndInstantiateEnemy("enemy_goblin_shaman");  // 25%
+            else if (roll <= 99f) FindAndInstantiateEnemy("enemy_hobgoblin");      // 19%
+            else FindAndInstantiateEnemy("enemy_goblin_king");                     // 1%
         }
     }
 

@@ -407,8 +407,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28f585532418d204f85d98a18b3b7348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adventurerListing: {fileID: 8073895765403577993, guid: 79b00b279ae5f7845bc1bc906b584ebb, type: 3}
+  prefab: {fileID: 8073895765403577993, guid: 79b00b279ae5f7845bc1bc906b584ebb, type: 3}
   canvas: {fileID: 853821400}
+  parent: {fileID: 853821400}
   spawnCount: 0
 --- !u!1 &1080861788
 GameObject:
