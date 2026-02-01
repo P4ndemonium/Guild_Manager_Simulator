@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -48,29 +49,45 @@ public class GameSceneManager : MonoBehaviour
 
     public void UnloadCurrentScene()
     {
+        AsyncOperation unloadOp = null;
+
         if (currentScene == guildScene)
         {
             guildCanvas.SetActive(false);
             mainMenuCanvas.SetActive(true);
             currentScene = mainMenuScene;
-            SceneManager.UnloadSceneAsync(guildScene);
+            unloadOp = SceneManager.UnloadSceneAsync(guildScene);
         }
         else if (currentScene == listingScene)
         {
             guildCanvas.SetActive(true);
             currentScene = guildScene;
-            SceneManager.UnloadSceneAsync(listingScene);
+            unloadOp = SceneManager.UnloadSceneAsync(listingScene);
         }
         else if (currentScene == combatScene)
         {
             guildCanvas.SetActive(true);
             currentScene = guildScene;
-            SceneManager.UnloadSceneAsync(combatScene);
+            unloadOp = SceneManager.UnloadSceneAsync(combatScene);
         }
 
-        // Update progress after
-        GoldUI ui = FindFirstObjectByType<GoldUI>();
-        if (ui != null) ui.UpdateGoldText();
+
+
+        if (unloadOp != null)
+        {
+            unloadOp.completed += (op) =>
+            {
+                // This code runs ONLY once the scene is 100% gone
+                ProgressUI ui = FindFirstObjectByType<ProgressUI>();
+                if (ui != null) ui.UpdateProgressText();
+            };
+        }
+        else
+        {
+            // Fallback: if no scene was unloaded, update anyway
+            ProgressUI ui = FindFirstObjectByType<ProgressUI>();
+            if (ui != null) ui.UpdateProgressText();
+        }
     }
 
     public void RegisterGuildCanvas(GameObject canvas) => guildCanvas = canvas;

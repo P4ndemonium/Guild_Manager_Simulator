@@ -28,7 +28,7 @@ public class AdventurerCombatUI : Adventurer
             nameText.text = unitName;
 
             healthBar.fillAmount = currentHealth / maxHealth;
-            healthText.text = $"HP: {(int)currentHealth} / {maxHealth}";
+            healthText.text = $"HP: {Mathf.CeilToInt(currentHealth)} / {maxHealth}";
 
             statsTextLeft.text = $"STR: {STR}\n" +
                                  $"DEX: {DEX}\n" +

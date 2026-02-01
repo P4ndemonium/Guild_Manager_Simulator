@@ -13,7 +13,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected Team unitTeam; public Team UnitTeam => unitTeam;
 
     [Header("Base Stats")]
-    [SerializeField] protected string unitID;
+    [SerializeField] protected string unitID; public string UnitID => unitID;
     [SerializeField] protected string unitName; public string UnitName => unitName;
 
     [SerializeField] protected int STR; // Strength     - Physical Damage
@@ -45,7 +45,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected bool isDead = false; public bool IsDead => isDead;
     [SerializeField] protected int speed; 
     [SerializeField] protected int actionCost; public int ActionCost => actionCost;
-    [SerializeField] public int nextActionTime; // The 'timestamp' for their next turn
+    [SerializeField] public int nextActionTime;
 
     // Start is called before the first frame update
     void Start()

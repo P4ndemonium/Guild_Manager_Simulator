@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 
 public class SaveManager : MonoBehaviour
 {
-    public static SaveManager Instance { get; private set; } // The global "hook"
+    public static SaveManager Instance { get; private set; } 
     public GameSaveFile saveFile;
     public int currentActiveSlot = 1;
 
@@ -19,15 +19,29 @@ public class SaveManager : MonoBehaviour
     // Call this to save the current state to a file
     public void OnSaveButtonPressed()
     {
+        OnLoadButtonPressed();
+
         Unit[] units = FindObjectsOfType<Unit>();
 
         foreach (Unit u in units)
         {
-            // ONLY save if the unit is hired
             if (u.IsHired)
             {
                 UnitSaveData packedData = u.SaveToData();
-                saveFile.hiredAdventurers.Add(packedData);
+
+                // Check if this specific unit already exists in the loaded list
+                int index = saveFile.hiredAdventurers.FindIndex(d => d.unitID == packedData.unitID);
+
+                if (index == -1)
+                {
+                    // If it's a brand new unit, add it to the existing list
+                    saveFile.hiredAdventurers.Add(packedData);
+                }
+                else
+                {
+                    // If it already existed in the file, update its data (e.g. new position/stats)
+                    saveFile.hiredAdventurers[index] = packedData;
+                }
             }
         }
         SaveToFile();
@@ -50,6 +64,22 @@ public class SaveManager : MonoBehaviour
 
 
         Debug.Log("Data Loaded!");
+    }
+
+    public List<UnitSaveData> GetAllUnitsFromSave()
+    {
+        string path = GetPath(currentActiveSlot);
+
+        if (!File.Exists(path))
+        {
+            Debug.LogWarning("No save file found at " + path);
+            return new List<UnitSaveData>(); // Return empty list instead of null to avoid errors
+        }
+
+        string json = File.ReadAllText(path);
+        GameSaveFile tempFile = JsonUtility.FromJson<GameSaveFile>(json);
+
+        return tempFile.hiredAdventurers ?? new List<UnitSaveData>();
     }
 
     // Reset all data
@@ -124,6 +154,8 @@ public class SaveManager : MonoBehaviour
         if (ProgressManager.Instance != null)
         {
             saveFile.gold = ProgressManager.Instance.gold;
+            saveFile.week = ProgressManager.Instance.week;
+            saveFile.rating = ProgressManager.Instance.rating;
         }
         else
         {
@@ -155,21 +187,48 @@ public class SaveManager : MonoBehaviour
             if (ProgressManager.Instance != null)
             {
                 ProgressManager.Instance.gold = tempSave.gold;
+                ProgressManager.Instance.week = tempSave.week;
+                ProgressManager.Instance.rating = tempSave.rating;
 
-                GoldUI ui = FindFirstObjectByType<GoldUI>();
-                if (ui != null) ui.UpdateGoldText();
-
-                Debug.Log("Gold loaded: " + tempSave.gold);
+                ProgressUI ui = FindFirstObjectByType<ProgressUI>();
+                if (ui != null) ui.UpdateProgressText();
             }
         }
         else
         {
-            // NEW SAVE FILE LOGIC: 
             // If no file exists, set the default starting gold
             if (ProgressManager.Instance != null)
             {
                 ProgressManager.Instance.gold = 1000; // Your starting amount
-                Debug.Log("No save found. Starting gold set to 1000.");
+                ProgressManager.Instance.week = 0;
+                ProgressManager.Instance.rating = 3f;
+                Debug.Log("No save found.");
+            }
+        }
+    }
+
+    public void DeleteUnitFromSave(string unitID)
+    {
+        string path = GetPath(currentActiveSlot);
+
+        if (!File.Exists(path)) return;
+
+        // 1. Load the data into a temporary local variable
+        string json = File.ReadAllText(path);
+        GameSaveFile tempSave = JsonUtility.FromJson<GameSaveFile>(json);
+
+        if (tempSave.hiredAdventurers != null)
+        {
+            // 2. Remove the specific unit from the local list
+            int initialCount = tempSave.hiredAdventurers.Count;
+            tempSave.hiredAdventurers.RemoveAll(u => u.unitID == unitID);
+
+            // 3. Only save back to disk if something was actually removed
+            if (tempSave.hiredAdventurers.Count < initialCount)
+            {
+                string updatedJson = JsonUtility.ToJson(tempSave, true);
+                File.WriteAllText(path, updatedJson);
+                Debug.Log($"Unit {unitID} removed and file updated.");
             }
         }
     }

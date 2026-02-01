@@ -87,6 +87,11 @@ public class CombatManager : MonoBehaviour
                 targets.Remove(target);
                 // We don't necessarily Destroy immediately if you want a death animation
                 Destroy(target.gameObject, 0.5f);
+
+                if (target.UnitTeam == Team.Adventurer)
+                {
+                    SaveManager.Instance.DeleteUnitFromSave(target.UnitID);
+                }
             }
 
             if (CheckForBattleEnd())
@@ -139,7 +144,8 @@ public class CombatManager : MonoBehaviour
         if (adventurersWiped)
         {
             Debug.Log("<color=red>DEFEAT! All adventurers have fallen.</color>");
-            EndBattle(Team.Enemy); // Create this method to handle the UI
+            EndBattle(Team.Enemy);
+
             return true;
         }
 
@@ -147,6 +153,7 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log("<color=green>VICTORY! All enemies defeated.</color>");
             EndBattle(Team.Adventurer);
+
             return true;
         }
 
@@ -162,10 +169,14 @@ public class CombatManager : MonoBehaviour
                 $"Gold received: {QuestManager.Instance.questReward}\n\n" +
                 $"Survivng members: {GetSurvivorList()}";
             ProgressManager.Instance.gold += QuestManager.Instance.questReward;
+            ProgressManager.Instance.rating -= 1f;
+            ProgressManager.Instance.week += 1;
         }
         else
         {
             endText.text = $"Your party was wiped out...";
+            ProgressManager.Instance.rating += 0.2f;
+            ProgressManager.Instance.week += 1;
         }
     }
 

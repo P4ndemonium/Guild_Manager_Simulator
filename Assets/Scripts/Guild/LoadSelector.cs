@@ -12,9 +12,9 @@ public class LoadSelector : MonoBehaviour
 
     public void LoadAdventurers()
     {
-        SaveManager.Instance.OnLoadButtonPressed();
+        List<UnitSaveData> loadedUnits = SaveManager.Instance.GetAllUnitsFromSave();
 
-        foreach (UnitSaveData unitData in SaveManager.Instance.saveFile.hiredAdventurers)
+        foreach (UnitSaveData unitData in loadedUnits)
         {
             GameObject newPanel = Instantiate(adventurerSelector, content);
 

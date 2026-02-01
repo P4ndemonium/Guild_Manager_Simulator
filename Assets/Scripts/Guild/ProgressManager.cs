@@ -10,10 +10,10 @@ public class ProgressManager : MonoBehaviour
     public int guildRankProgress;
     public int year;
     public int month;
-    public int week;
 
     // ================================================================
-    // AUTO UPDATES UI IF GOLD CHANGES ANYWHERE
+    // AUTO UPDATES UI IF CHANGES ANYWHERE
+    // Gold
     private int _gold;
     public int gold
     {
@@ -23,7 +23,29 @@ public class ProgressManager : MonoBehaviour
             _gold = value;
             // Every time gold is changed (e.g. gold -= 10), 
             // it automatically tries to update the UI
-            FindFirstObjectByType<GoldUI>()?.UpdateGoldText();
+            FindFirstObjectByType<ProgressUI>()?.UpdateProgressText();
+        }
+    }
+    // Week
+    private int _week;
+    public int week
+    {
+        get => _week;
+        set
+        {
+            _week = value;
+            FindFirstObjectByType<ProgressUI>()?.UpdateProgressText();
+        }
+    }
+    // Rating
+    private float _rating;
+    public float rating
+    {
+        get => _rating;
+        set
+        {
+            _rating = value;
+            FindFirstObjectByType<ProgressUI>()?.UpdateProgressText();
         }
     }
     // ================================================================
