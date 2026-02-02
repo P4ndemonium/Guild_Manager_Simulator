@@ -2546,6 +2546,7 @@ MonoBehaviour:
   selectedPartyNum: 1
   selectedPartyNumText: {fileID: 0}
   encounter: 
+  questReward: 0
 --- !u!114 &2134602774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2713,6 +2714,8 @@ MonoBehaviour:
   saveFile:
     saveTimestamp: 
     gold: 0
+    week: 0
+    rating: 0
     hiredAdventurers: []
   currentActiveSlot: 1
 --- !u!114 &2134602778
@@ -2777,8 +2780,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9394ff92d8b27c84fb85e1a4af51a87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guildRank: 
+  guildRank: 0
   guildRankProgress: 0
+  year: 0
+  month: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

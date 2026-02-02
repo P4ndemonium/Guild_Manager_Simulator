@@ -7,14 +7,20 @@ using TMPro;
 
 public class CombatManager : MonoBehaviour
 {
+    public static CombatManager Instance;
+
     public TurnOrderUI turnOrderUI;
     public GameObject endPanel;
     public TextMeshProUGUI endText;
+    public GameObject popupPrefab;
+    public Transform popupParent;
 
     public int turnNum;
     public List<Unit> adventurers = new List<Unit>();
     public List<Unit> enemies = new List<Unit>();
     public List<Unit> allUnitsInBattle = new List<Unit>();
+
+    void Awake() => Instance = this;
 
     void Start() // Edit > Project Settings > Script Execution Order : SET TO LAST
     {
@@ -101,7 +107,7 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(2f); // Time for the player to see the action
+        yield return new WaitForSeconds(1f); // Time for the player to see the action
     }
 
     public Unit GetWeightedRandomTarget(List<Unit> potentialTargets)
@@ -169,13 +175,13 @@ public class CombatManager : MonoBehaviour
                 $"Gold received: {QuestManager.Instance.questReward}\n\n" +
                 $"Survivng members: {GetSurvivorList()}";
             ProgressManager.Instance.gold += QuestManager.Instance.questReward;
-            ProgressManager.Instance.rating -= 1f;
+            ProgressManager.Instance.rating += 0.2f;
             ProgressManager.Instance.week += 1;
         }
         else
         {
             endText.text = $"Your party was wiped out...";
-            ProgressManager.Instance.rating += 0.2f;
+            ProgressManager.Instance.rating -= 1f;
             ProgressManager.Instance.week += 1;
         }
     }
@@ -187,5 +193,11 @@ public class CombatManager : MonoBehaviour
             .Select(u => $"{u.UnitName}");
 
         return string.Join(", ", survivorStrings);
+    }
+
+    public void SpawnPopup(Vector3 position, float amount)
+    {
+        GameObject popup = Instantiate(popupPrefab, position, Quaternion.identity, popupParent);
+        popup.GetComponent<DamagePopup>().Setup(amount);
     }
 }

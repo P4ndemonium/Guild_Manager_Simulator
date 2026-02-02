@@ -47,6 +47,8 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected int actionCost; public int ActionCost => actionCost;
     [SerializeField] public int nextActionTime;
 
+    public List<ItemInstance> inventory = new List<ItemInstance>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -132,6 +134,7 @@ public abstract class Unit : MonoBehaviour
     public virtual void TakeDamage(float amount)
     {
         currentHealth -= amount;
+        ShowDamagePopup(amount);
 
         RefreshMyUI();
 
@@ -165,7 +168,7 @@ public abstract class Unit : MonoBehaviour
         Vector3 targetPos = target.transform.position;
 
         // 1. Lunge Forward (Move 90% of the way to the target)
-        Vector3 lungeDestination = Vector3.Lerp(startPos, targetPos, 0.9f);
+        Vector3 lungeDestination = Vector3.Lerp(startPos, targetPos, 1f);
         float elapsedTime = 0f;
         float duration = 0.15f; // Fast lunge
 
@@ -210,5 +213,10 @@ public abstract class Unit : MonoBehaviour
             GetComponent<AdventurerCombatUI>()?.DisplayStats();
         else
             GetComponent<EnemyCombatUI>()?.DisplayStats();
+    }
+
+    private void ShowDamagePopup(float amount)
+    {
+        CombatManager.Instance.SpawnPopup(transform.position + Vector3.up, amount);
     }
 }
