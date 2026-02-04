@@ -35,6 +35,7 @@ public class ProgressManager : MonoBehaviour
         {
             _week = value;
             FindFirstObjectByType<ProgressUI>()?.UpdateProgressText();
+            if (GenerateTraining.Instance != null) GenerateTraining.Instance.GenerateWeightedOptions();
         }
     }
     // Rating

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class AdventurerInfoPanel : MonoBehaviour
 {
@@ -45,48 +46,93 @@ public class AdventurerInfoPanel : MonoBehaviour
 
     public void DisplayAdventurerInformation(SelectorUI data)
     {
+        // 1. Unsubscribe from the OLD unit first (to prevent memory leaks)
+        if (currentSelector != null)
+            currentSelector.OnStatsChanged -= RefreshUI;
+
         currentSelector = data;
+
+        // 2. Subscribe to the NEW unit
+        currentSelector.OnStatsChanged += RefreshUI;
+
+        panelRoot.SetActive(true);
+        RefreshUI(); // Initial update
+    }
+
+    // This runs every time the unit "screams" that its stats changed
+    private void RefreshUI()
+    {
+        if (currentSelector == null) return;
+
         panelRoot.SetActive(true);
 
-        image.sprite = data.SImage.sprite;
-        nameText.text = data.SNameText.text;
+        image.sprite = currentSelector.SImage.sprite;
+        nameText.text = currentSelector.SNameText.text;
+        ageText.text = "Age: " + currentSelector.Age.ToString("F0");
+        partyNumText.text = currentSelector.PartyNum.ToString("F0");
 
-        STRText.text = data.pSTR.ToString("F0"); // "F0" removes decimals
-        STRBar.fillAmount = data.pSTR / maxValue;
-        INTText.text = data.pINT.ToString("F0");
-        INTBar.fillAmount = data.pINT / maxValue;
-        DEXText.text = data.pDEX.ToString("F0");
-        DEXBar.fillAmount = data.pDEX / maxValue;
-        WISText.text = data.pWIS.ToString("F0");
-        WISBar.fillAmount = data.pWIS / maxValue;
-        VITText.text = data.pVIT.ToString("F0");
-        VITBar.fillAmount = data.pVIT / maxValue;
-        ENDText.text = data.pEND.ToString("F0");
-        ENDBar.fillAmount = data.pEND / maxValue;
-        SPIText.text = data.pSPI.ToString("F0");
-        SPIBar.fillAmount = data.pSPI / maxValue;
-        AGIText.text = data.pAGI.ToString("F0");
-        AGIBar.fillAmount = data.pAGI / maxValue;
-        GROText.text = data.pGRO.ToString("F0");
-        GROBar.fillAmount = data.pGRO / maxValue;
+        // 1. Set the global animation settings
+        float duration = 0.6f;
+        Ease easeType = Ease.OutQuad;
 
-        ageText.text = "Age: " + data.Age.ToString("F0");
+        // 2. Animate each stat using a helper (defined below)
+        AnimateStat(currentSelector.pSTR, STRBar, STRText, duration, easeType);
+        AnimateStat(currentSelector.pINT, INTBar, INTText, duration, easeType);
+        AnimateStat(currentSelector.pDEX, DEXBar, DEXText, duration, easeType);
+        AnimateStat(currentSelector.pWIS, WISBar, WISText, duration, easeType);
+        AnimateStat(currentSelector.pVIT, VITBar, VITText, duration, easeType);
+        AnimateStat(currentSelector.pEND, ENDBar, ENDText, duration, easeType);
+        AnimateStat(currentSelector.pSPI, SPIBar, SPIText, duration, easeType);
+        AnimateStat(currentSelector.pAGI, AGIBar, AGIText, duration, easeType);
+        AnimateStat(currentSelector.pGRO, GROBar, GROText, duration, easeType);
+    }
 
-        partyNumText.text = data.PartyNum.ToString("F0");
+    private void AnimateStat(float targetValue, Image bar, TextMeshProUGUI text, float duration, Ease ease)
+    {
+        bar.DOKill();
+        text.DOKill();
+
+        // 1. Determine if it's a buff or a debuff
+        float startValue = bar.fillAmount * maxValue;
+        Color feedbackColor = Color.white; // Default color
+
+        if (targetValue > startValue + 0.1f) // Small threshold to avoid micro-flickers
+            feedbackColor = Color.green;
+        else if (targetValue < startValue - 0.1f)
+            feedbackColor = Color.red;
+
+        // 2. Animate the Color Punch
+        // Change to green/red immediately, then fade back to white over the duration
+        text.color = feedbackColor;
+        text.DOColor(Color.white, duration).SetEase(Ease.InQuad);
+
+        // 3. Animate the Fill Bar
+        DOTween.To(() => bar.fillAmount, x => bar.fillAmount = x, targetValue / maxValue, duration).SetEase(ease);
+
+        // 4. Animate the Text Number
+        DOTween.To(() => startValue, x => {
+            text.text = x.ToString("F0");
+        }, targetValue, duration).SetEase(ease);
+
+        // 5. Optional: Subtle "Punch" Scale (makes the text pop out slightly)
+        if (feedbackColor != Color.white)
+        {
+            text.transform.DOPunchScale(new Vector3(0.2f, 0.2f, 0.2f), 0.3f);
+        }
     }
 
     public void UpParty()
     {
         currentSelector.IncParty();
-        PartyHelper();
+        SaveUnit();
     }
     public void DownParty()
     {
         currentSelector.DecParty();
-        PartyHelper();
+        SaveUnit();
     }
 
-    public void PartyHelper()
+    public void SaveUnit()
     {
         partyNumText.text = currentSelector.PartyNum.ToString("F0");
         currentSelector.DisplaySelector();

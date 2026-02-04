@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -20,15 +21,40 @@ public class EnemyCombatUI : Enemy
 
     public void DisplayStats()
     {
-        //image.sprite = library.allPossibleSprites[spriteID]; // undo when enemy sprites are done
+        //image.sprite = library.allPossibleSprites[spriteID]; // No sprites for enemy yet
 
         if (nameText != null && statsTextLeft != null && statsTextRight != null)
         {
             nameText.text = unitName;
 
-            healthBar.fillAmount = currentHealth / maxHealth;
-            healthText.text = $"HP: {(int)currentHealth} / {maxHealth}";
+            // 1. ANIMATE THE HEALTH BAR
+            float duration = 0.5f;
+            float targetFill = currentHealth / maxHealth;
 
+            // Kill any previous health animation to prevent flickering
+            healthBar.DOKill();
+
+            // Use DOTween to fill the bar
+            DOTween.To(() => healthBar.fillAmount, x => healthBar.fillAmount = x, targetFill, duration).SetEase(Ease.OutQuad);
+
+            healthBar.transform.DOShakePosition(0.2f, 10f, 10);
+
+            // 2. ANIMATE THE HP TEXT (Counting numbers)
+            // We'll parse the current text to find where to start counting from
+            healthText.DOKill();
+            float startHP = currentHealth; // Or use a variable to store previous health
+
+            DOTween.To(() => startHP, x => {
+                healthText.text = $"HP: {Mathf.CeilToInt(x)} / {maxHealth}";
+            }, currentHealth, duration);
+
+            // 3. OPTIONAL: CHANGE BAR COLOR BASED ON HP %
+            if (targetFill < 0.25f)
+                healthBar.DOColor(Color.red, duration);
+            else
+                healthBar.DOColor(Color.green, duration);
+
+            // 4. Update the static stat lists
             statsTextLeft.text = $"STR: {STR}\n" +
                                  $"DEX: {DEX}\n" +
                                  $"VIT: {VIT}\n" +

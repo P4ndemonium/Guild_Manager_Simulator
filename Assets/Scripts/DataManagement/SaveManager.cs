@@ -100,7 +100,18 @@ public class SaveManager : MonoBehaviour
 
     public void UpdateUnitInSave(UnitSaveData newData)
     {
+        // FIX: Always ensure we have the LATEST data from the disk before modifying it
+        // If we don't do this, we are editing an empty list and overwriting the file
+        string path = GetPath(currentActiveSlot);
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            saveFile = JsonUtility.FromJson<GameSaveFile>(json);
+        }
+
+        // Safety check if file didn't exist or was empty
         if (saveFile == null) saveFile = new GameSaveFile();
+        if (saveFile.hiredAdventurers == null) saveFile.hiredAdventurers = new List<UnitSaveData>();
 
         int existingIndex = saveFile.hiredAdventurers.FindIndex(data => data.unitID == newData.unitID);
 
