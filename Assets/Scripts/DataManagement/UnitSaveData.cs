@@ -20,4 +20,5 @@ public class UnitSaveData
     public int age;
     public int spriteID;
     public int partyNum;
+    public List<ItemSaveData> inventory = new List<ItemSaveData>();
 }

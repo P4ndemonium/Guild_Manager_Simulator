@@ -43,7 +43,8 @@ public class SelectorUI : Adventurer, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         AdventurerInfoPanel.Instance.DisplayAdventurerInformation(this);
-
         GenerateTraining.Instance.currentSelector = this;
+        InventoryManager.Instance.currentSelector = this;
+        InventoryManager.Instance.SwitchAdventurer();
     }
 }

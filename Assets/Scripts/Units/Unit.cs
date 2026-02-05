@@ -22,9 +22,17 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected int DEX; // Dexterity    - Chance of physical damage used in attack
     [SerializeField] protected int WIS; // Wisdom       - Chance of magic damage used in attack
     [SerializeField] protected int VIT; // Vitality     - Base HP
-    [SerializeField] protected int END; public int P_END => END; // Endurance    - Physical damage reduction
-    [SerializeField] protected int SPI; public int P_SPI => SPI; // Spirit       - Magic damage reduction
+    [SerializeField] protected int END; // Endurance    - Physical damage reduction
+    [SerializeField] protected int SPI; // Spirit       - Magic damage reduction
     [SerializeField] protected int AGI; // Agility      - turn order
+    public int EffectiveSTR => GetStat(StatType.STR, STR);
+    public int EffectiveINT => GetStat(StatType.INT, INT);
+    public int EffectiveDEX => GetStat(StatType.DEX, DEX);
+    public int EffectiveWIS => GetStat(StatType.WIS, WIS);
+    public int EffectiveVIT => GetStat(StatType.VIT, VIT);
+    public int EffectiveEND => GetStat(StatType.END, END);
+    public int EffectiveSPI => GetStat(StatType.SPI, SPI);
+    public int EffectiveAGI => GetStat(StatType.AGI, AGI);
 
     [SerializeField] protected int GRO; // Growth       - Rate of improvement or reduction of stats      # Maybe make it change every year and reduce as age goes by
     [SerializeField] protected int age;
@@ -48,7 +56,10 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected int actionCost; public int ActionCost => actionCost;
     [SerializeField] public int nextActionTime;
 
-    public List<ItemInstance> inventory = new List<ItemInstance>();
+    public List<ItemSaveData> inventory = new List<ItemSaveData>();
+
+    protected Dictionary<StatType, float> statBonuses = new Dictionary<StatType, float>();
+    protected Dictionary<StatType, float> statMultipliers = new Dictionary<StatType, float>();
 
     // The "Radio Station" - other scripts can subscribe to this
     public event Action OnStatsChanged;
@@ -104,7 +115,8 @@ public abstract class Unit : MonoBehaviour
             GRO = this.GRO,
             age = this.age,
             spriteID = this.spriteID,
-            partyNum = this.partyNum
+            partyNum = this.partyNum,
+            inventory = this.inventory
         };
     }
 
@@ -126,6 +138,7 @@ public abstract class Unit : MonoBehaviour
         this.age = data.age;
         this.spriteID = data.spriteID;
         this.partyNum = data.partyNum;
+        this.inventory = data.inventory;  
 
         CalculateStats();
     }
@@ -139,7 +152,10 @@ public abstract class Unit : MonoBehaviour
         partyNum -= 1;
     }
 
+    // ===================================================================================================
     // Combat
+    // ===================================================================================================
+
     public virtual void TakeDamage(float amount)
     {
         currentHealth -= amount;
@@ -209,9 +225,9 @@ public abstract class Unit : MonoBehaviour
         string damageType = GetDamageType();
 
         if (damageType == "physical")
-            CalculateOutgoingDamage(physicalDamage, target.P_END, 80);
+            CalculateOutgoingDamage(physicalDamage, target.EffectiveEND, 80);
         else if (damageType == "magic")
-            CalculateOutgoingDamage(magicDamage, target.P_SPI, 80);
+            CalculateOutgoingDamage(magicDamage, target.EffectiveSPI, 80);
 
         target.TakeDamage(outgoingDamage);
     }
@@ -228,6 +244,10 @@ public abstract class Unit : MonoBehaviour
     {
         CombatManager.Instance.SpawnPopup(transform.position + Vector3.up, amount);
     }
+
+    // ===================================================================================================
+    // Training
+    // ===================================================================================================
 
     public void ApplyTraining(TrainingOption option)
     {
@@ -389,5 +409,95 @@ public abstract class Unit : MonoBehaviour
         }
 
         NotifyStatsChanged();
+    }
+
+    // ===================================================================================================
+    // Items
+    // ===================================================================================================
+
+    public int GetStat(StatType type, int baseValue)
+    {
+        float flat = statBonuses.ContainsKey(type) ? statBonuses[type] : 0;
+        float mult = statMultipliers.ContainsKey(type) ? statMultipliers[type] : 0;
+
+        // Formula: (Base + 10 Flat) * (1 + 0.15 Percent)
+        return Mathf.RoundToInt((baseValue + flat) * (1 + mult));
+    }
+
+    // Call this whenever an item is added, removed, or the game is loaded
+    public void RefreshItemModifiers()
+    {
+        statBonuses.Clear();
+        statMultipliers.Clear();
+        // Clear unique effects here if you have a list of them
+
+        foreach (ItemSaveData item in inventory)
+        {
+            // 1. Process Main Stat
+            ApplyModToInternalLookup(item.mainStat);
+
+            // 2. Process all Substats
+            foreach (var mod in item.subStats)
+            {
+                ApplyModToInternalLookup(mod);
+            }
+
+            // 3. Handle Unique Effects
+            if (item.rarity == Rarity.Unique && !string.IsNullOrEmpty(item.uniqueEffect))
+            {
+                ActivateUniqueEffect(item.uniqueEffect);
+            }
+        }
+
+        CalculateStats();
+        NotifyStatsChanged();
+    }
+
+    private void ApplyModToInternalLookup(StatModifier mod)
+    {
+        // Safety check: ensure we only modify the 8 core stats
+        // This ignores things like StatType.ReshuffleAll if they were somehow added
+        if (mod.type == StatType.RandomStat || mod.type == StatType.AllOtherStats) return;
+
+        if (mod.isPercent)
+        {
+            if (!statMultipliers.ContainsKey(mod.type)) statMultipliers[mod.type] = 0;
+            statMultipliers[mod.type] += mod.value;
+        }
+        else
+        {
+            if (!statBonuses.ContainsKey(mod.type)) statBonuses[mod.type] = 0;
+            statBonuses[mod.type] += mod.value;
+        }
+    }
+
+    public void AddItem(ItemData blueprint, Rarity rarity)
+    {
+        // Create the new "Rolled" item data
+        ItemSaveData newItem = new ItemSaveData(blueprint, rarity);
+        inventory.Add(newItem);
+
+        RefreshItemModifiers();
+    }
+
+    public void RemoveItem(ItemSaveData item)
+    {
+        if (inventory.Contains(item))
+        {
+            inventory.Remove(item);
+            RefreshItemModifiers();
+        }
+    }
+
+    public void LoadInventory(List<ItemSaveData> savedItems)
+    {
+        inventory = savedItems;
+        RefreshItemModifiers();
+    }
+
+    private void ActivateUniqueEffect(string effectName)
+    {
+        // Placeholder for your unique logic (e.g., "Life Steal", "Double Turn")
+
     }
 }

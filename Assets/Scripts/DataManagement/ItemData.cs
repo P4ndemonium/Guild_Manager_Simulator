@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Item")]
+[CreateAssetMenu(menuName = "Items/Item Blueprint")]
 public class ItemData : ScriptableObject
 {
-    public string itemName;
+    public string itemID; // Unique ID to link SaveData back to this SO
+    public string baseName;
     public Sprite icon;
 
-    // The pool of 8 potential stats for this specific weapon type
-    public List<StatRange> possibleStats = new List<StatRange>();
+    [Tooltip("This stat will always appear on this item type")]
+    public StatType forcedMainStat;
+
+    [Tooltip("The unique effect if this item rolls as a Unique rarity")]
+    public string uniqueEffectDescription;
 }

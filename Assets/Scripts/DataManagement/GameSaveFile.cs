@@ -9,5 +9,6 @@ public class GameSaveFile
     public int gold;
     public int week;
     public float rating;
+    public List<ItemSaveData> stashItems = new List<ItemSaveData>();
     public List<UnitSaveData> hiredAdventurers = new List<UnitSaveData>();
 }

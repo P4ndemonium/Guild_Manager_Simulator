@@ -50,6 +50,35 @@ public class SaveManager : MonoBehaviour
         Debug.Log("Save created at: " + saveFile.saveTimestamp);
     }
 
+    public void OnSaveButtonPressedNOLOAD()
+    {
+        // REMOVED: OnLoadButtonPressed(); <-- This was overwriting your current progress!
+
+        // 1. Ensure the currentActiveSlot data is in memory
+        if (saveFile == null) saveFile = new GameSaveFile();
+
+        // 2. Find all active units (this includes SelectorUI since it inherits from Unit)
+        Unit[] units = FindObjectsOfType<Unit>();
+
+        foreach (Unit u in units)
+        {
+            if (u.IsHired)
+            {
+                // Unit.SaveToData() MUST include the inventory list!
+                UnitSaveData packedData = u.SaveToData();
+
+                int index = saveFile.hiredAdventurers.FindIndex(d => d.unitID == packedData.unitID);
+
+                if (index == -1)
+                    saveFile.hiredAdventurers.Add(packedData);
+                else
+                    saveFile.hiredAdventurers[index] = packedData;
+            }
+        }
+
+        SaveToFile();
+    }
+
     // Call this to load data back into the scene
     public void OnLoadButtonPressed()
     {
@@ -171,6 +200,16 @@ public class SaveManager : MonoBehaviour
         else
         {
             Debug.LogError("SaveManager: ProgressManager.Instance is null! Cannot save gold.");
+        }
+
+        // NEW: Save the shared Stash items
+        if (InventoryManager.Instance != null && InventoryManager.Instance.stash != null)
+        {
+            saveFile.stashItems = new List<ItemSaveData>();
+            foreach (ItemUI ui in InventoryManager.Instance.stash.itemsInContainer)
+            {
+                saveFile.stashItems.Add(ui.data);
+            }
         }
 
         string json = JsonUtility.ToJson(saveFile, true);

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy : Unit
 {
+    public LootTable dropTable;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +16,16 @@ public class Enemy : Unit
     void Update()
     {
         
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        if (dropTable != null)
+        {
+            ItemSaveData droppedItem = dropTable.GetRandomDrop();
+            // Logic to spawn a physical chest or add directly to player
+        }
     }
 
     public override void RandomizeStats()
