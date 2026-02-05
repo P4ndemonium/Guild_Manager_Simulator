@@ -26,7 +26,7 @@ public class SelectorUI : Adventurer, IPointerClickHandler
     public int pGRO => GRO;
 
     public int Age => age;
-    public int PartyNum => partyNum;
+    //public int PartyNum => partyNum;
 
     void Start()
     {
@@ -46,5 +46,10 @@ public class SelectorUI : Adventurer, IPointerClickHandler
         GenerateTraining.Instance.currentSelector = this;
         InventoryManager.Instance.currentSelector = this;
         InventoryManager.Instance.SwitchAdventurer();
+    }
+
+    public void SetPartyNum(int num)
+    {
+        partyNum = num;
     }
 }

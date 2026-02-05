@@ -7,7 +7,8 @@ public class QuestManager : MonoBehaviour
 {
     public static QuestManager Instance;
 
-    public int selectedPartyNum = 1;
+    public int selectedPartyNum = 0;
+    public int partyLimit = 3;
     public TextMeshProUGUI selectedPartyNumText;
     public string encounter;
     public int questReward;
@@ -31,5 +32,10 @@ public class QuestManager : MonoBehaviour
             selectedPartyNum--;
             selectedPartyNumText.text = selectedPartyNum.ToString();
         }
+    }
+
+    public void ResetSelectedPartyNum()
+    {
+        selectedPartyNum = 1;
     }
 }

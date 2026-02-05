@@ -11,4 +11,5 @@ public class UICommandBridge : MonoBehaviour
     public void ClickResetSaveData() { SaveManager.Instance.ResetSaveData(); }
     public void ClickIncSelectedParty() { QuestManager.Instance.IncSelectedParty(); }
     public void ClickDecSelectedParty() { QuestManager.Instance.DecSelectedParty(); }
+    public void ClickResetSelectedPartyNum() { QuestManager.Instance.ResetSelectedPartyNum(); }
 }

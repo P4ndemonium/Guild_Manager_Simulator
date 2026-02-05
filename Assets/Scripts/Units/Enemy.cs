@@ -30,14 +30,17 @@ public class Enemy : Unit
 
     public override void RandomizeStats()
     {
-        STR = Random.Range(1, STR + 1);
-        INT = Random.Range(1, INT + 1);
-        DEX = Random.Range(1, DEX + 1);
-        WIS = Random.Range(1, WIS + 1);
-        VIT = Random.Range(1, VIT + 1);
-        END = Random.Range(1, END + 1);
-        SPI = Random.Range(1, SPI + 1);
-        AGI = Random.Range(1, AGI + 1);
+        // We calculate the min as (Current - 100), but cap it at 1.
+        // The max is (Current + 1), because Random.Range(int, int) is exclusive of the max.
+
+        STR = Random.Range(Mathf.Max(1, STR - 100), STR + 1);
+        INT = Random.Range(Mathf.Max(1, INT - 100), INT + 1);
+        DEX = Random.Range(Mathf.Max(1, DEX - 100), DEX + 1);
+        WIS = Random.Range(Mathf.Max(1, WIS - 100), WIS + 1);
+        VIT = Random.Range(Mathf.Max(1, VIT - 100), VIT + 1);
+        END = Random.Range(Mathf.Max(1, END - 100), END + 1);
+        SPI = Random.Range(Mathf.Max(1, SPI - 100), SPI + 1);
+        AGI = Random.Range(Mathf.Max(1, AGI - 100), AGI + 1);
 
         CalculateStats();
     }

@@ -19,6 +19,12 @@ public class InventoryContainer : MonoBehaviour
                 if (owner != null && !owner.inventory.Contains(item.data))
                 {
                     owner.inventory.Add(item.data);
+
+                    if (SaveManager.Instance != null)
+                    {
+                        UnitSaveData freshData = owner.SaveToData();
+                        SaveManager.Instance.UpdateUnitInSave(freshData);
+                    }
                 }
             }
             else
@@ -26,12 +32,11 @@ public class InventoryContainer : MonoBehaviour
                 // If it IS the stash, we clear the owner 
                 // so the item is no longer tied to an adventurer
                 owner = null;
-            }
 
-            // Always save after any move to ensure the file matches the UI
-            if (SaveManager.Instance != null)
-            {
-                SaveManager.Instance.OnSaveButtonPressedNOLOAD();
+                if (SaveManager.Instance != null)
+                {
+                    SaveManager.Instance.OnSaveButtonPressed();
+                }
             }
         }
     }
@@ -50,7 +55,8 @@ public class InventoryContainer : MonoBehaviour
                 // Save the fact that the unit no longer has this item
                 if (SaveManager.Instance != null)
                 {
-                    SaveManager.Instance.OnSaveButtonPressedNOLOAD();
+                    UnitSaveData freshData = owner.SaveToData();
+                    SaveManager.Instance.UpdateUnitInSave(freshData);
                 }
 
                 Debug.Log($"Removed {item.data.blueprintID} from {owner.UnitName}");

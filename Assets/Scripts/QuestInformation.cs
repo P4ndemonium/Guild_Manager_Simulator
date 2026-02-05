@@ -11,7 +11,7 @@ public class QuestInformation : MonoBehaviour, IPointerClickHandler
 
     private int lowestReward = 25;
     private int highestReward = 76;
-    private int reward;
+    [SerializeField] private int reward;
 
     [Header("Quest settings")]
     public QuestType questType;

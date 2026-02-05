@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class SaveManager : MonoBehaviour
 {
@@ -304,5 +305,19 @@ public class SaveManager : MonoBehaviour
         {
             Debug.LogWarning($"Attempted to delete save in slot {slot}, but no file exists at: {path}");
         }
+    }
+
+    public bool IsPartyFull(int partyId, int limit)
+    {
+        // 0 usually means "No Party", so we don't limit that
+        if (partyId == 0) return false;
+
+        // Load the latest data if necessary, or use the existing saveFile
+        if (saveFile == null || saveFile.hiredAdventurers == null) return false;
+
+        // Count how many units have this party ID
+        int count = saveFile.hiredAdventurers.Count(u => u.partyNum == partyId);
+
+        return count >= limit;
     }
 }

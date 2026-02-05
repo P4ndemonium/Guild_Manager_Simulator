@@ -39,7 +39,7 @@ public abstract class Unit : MonoBehaviour
 
     [SerializeField] protected AllSpritesLibrary library; public AllSpritesLibrary Library => library;
     [SerializeField] protected int spriteID; public int SpriteID => spriteID;
-    [SerializeField] protected int partyNum;
+    [SerializeField] protected int partyNum; public int PartyNum => partyNum;
     [SerializeField] protected int baseStatTotal; public int BaseStatTotal => baseStatTotal;
 
     [SerializeField] protected float maxHealth;
@@ -116,6 +116,7 @@ public abstract class Unit : MonoBehaviour
             age = this.age,
             spriteID = this.spriteID,
             partyNum = this.partyNum,
+            isHired = this.isHired,
             inventory = this.inventory
         };
     }
@@ -138,19 +139,20 @@ public abstract class Unit : MonoBehaviour
         this.age = data.age;
         this.spriteID = data.spriteID;
         this.partyNum = data.partyNum;
+        this.isHired = data.isHired;
         this.inventory = data.inventory;  
 
         CalculateStats();
     }
 
-    public void IncParty()
-    {
-        partyNum += 1;
-    }
-    public void DecParty()
-    {
-        partyNum -= 1;
-    }
+    //public void IncParty()
+    //{
+    //    partyNum += 1;
+    //}
+    //public void DecParty()
+    //{
+    //    partyNum -= 1;
+    //}
 
     // ===================================================================================================
     // Combat

@@ -35,8 +35,8 @@ public class AdventurerInfoPanel : MonoBehaviour
 
     public GameObject panelRoot; // The actual UI Panel object to show/hide
     public float maxValue = 250f;
-    public TextMeshProUGUI partyNumText;
-    private SelectorUI currentSelector;
+    public TMP_Dropdown partyDropdown;
+    public SelectorUI currentSelector;
 
     void Awake()
     {
@@ -69,7 +69,7 @@ public class AdventurerInfoPanel : MonoBehaviour
         image.sprite = currentSelector.SImage.sprite;
         nameText.text = currentSelector.SNameText.text;
         ageText.text = "Age: " + currentSelector.Age.ToString("F0");
-        partyNumText.text = currentSelector.PartyNum.ToString("F0");
+        partyDropdown.value = currentSelector.PartyNum;
 
         // 1. Set the global animation settings
         float duration = 0.6f;
@@ -121,20 +121,20 @@ public class AdventurerInfoPanel : MonoBehaviour
         }
     }
 
-    public void UpParty()
-    {
-        currentSelector.IncParty();
-        SaveUnit();
-    }
-    public void DownParty()
-    {
-        currentSelector.DecParty();
-        SaveUnit();
-    }
+    //public void UpParty()
+    //{
+    //    currentSelector.IncParty();
+    //    SaveUnit();
+    //}
+    //public void DownParty()
+    //{
+    //    currentSelector.DecParty();
+    //    SaveUnit();
+    //}
 
     public void SaveUnit()
     {
-        partyNumText.text = currentSelector.PartyNum.ToString("F0");
+        currentSelector.SetPartyNum(QuestManager.Instance.selectedPartyNum);
         currentSelector.DisplaySelector();
         UnitSaveData freshData = currentSelector.SaveToData();
         SaveManager.Instance.UpdateUnitInSave(freshData);

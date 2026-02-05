@@ -2544,7 +2544,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3e48bd07ee9acc49b7bd02b146a6427, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedPartyNum: 1
+  selectedPartyNum: 0
+  partyLimit: 3
   selectedPartyNumText: {fileID: 0}
   encounter: 
   questReward: 0
@@ -2576,6 +2577,8 @@ MonoBehaviour:
     age: 0
     spriteID: 0
     partyNum: 0
+    isHired: 0
+    inventory: []
   - unitTeam: 1
     unitID: enemy_green_slime
     unitName: Green Slime
@@ -2591,6 +2594,8 @@ MonoBehaviour:
     age: 0
     spriteID: 0
     partyNum: 0
+    isHired: 0
+    inventory: []
   - unitTeam: 1
     unitID: enemy_red_slime
     unitName: Red Slime
@@ -2606,6 +2611,8 @@ MonoBehaviour:
     age: 0
     spriteID: 0
     partyNum: 0
+    isHired: 0
+    inventory: []
   - unitTeam: 1
     unitID: enemy_goblin
     unitName: Goblin
@@ -2621,6 +2628,8 @@ MonoBehaviour:
     age: 0
     spriteID: 0
     partyNum: 0
+    isHired: 0
+    inventory: []
   - unitTeam: 1
     unitID: enemy_goblin_warrior
     unitName: Goblin Warrior
@@ -2636,6 +2645,8 @@ MonoBehaviour:
     age: 0
     spriteID: 0
     partyNum: 0
+    isHired: 0
+    inventory: []
   - unitTeam: 1
     unitID: enemy_goblin_shaman
     unitName: Goblin Shaman
@@ -2651,6 +2662,8 @@ MonoBehaviour:
     age: 0
     spriteID: 0
     partyNum: 0
+    isHired: 0
+    inventory: []
   - unitTeam: 1
     unitID: enemy_hobgoblin
     unitName: Hobgoblin
@@ -2666,6 +2679,8 @@ MonoBehaviour:
     age: 0
     spriteID: 0
     partyNum: 0
+    isHired: 0
+    inventory: []
   - unitTeam: 1
     unitID: enemy_goblin_king
     unitName: Hobgoblin
@@ -2681,6 +2696,8 @@ MonoBehaviour:
     age: 0
     spriteID: 0
     partyNum: 0
+    isHired: 0
+    inventory: []
 --- !u!114 &2134602775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2717,6 +2734,7 @@ MonoBehaviour:
     gold: 0
     week: 0
     rating: 0
+    stashItems: []
     hiredAdventurers: []
   currentActiveSlot: 1
 --- !u!114 &2134602778
