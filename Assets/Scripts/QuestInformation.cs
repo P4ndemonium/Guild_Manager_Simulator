@@ -85,6 +85,6 @@ public class QuestInformation : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         QuestConfirmation.Instance.confirmation.SetActive(true);
-        FindFirstObjectByType<ConfirmationMemory>().SetObjectToRemember(this.gameObject);
+        FindFirstObjectByType<ConfirmationMemory>().SetObjectToRemember(gameObject);
     }
 }

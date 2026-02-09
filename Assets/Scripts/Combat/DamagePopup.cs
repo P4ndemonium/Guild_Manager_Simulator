@@ -10,7 +10,7 @@ public class DamagePopup : MonoBehaviour
 
     public void Setup(float damageAmount)
     {
-        textMesh.SetText(damageAmount.ToString());
+        textMesh.SetText(damageAmount.ToString("F3"));
 
         // 1. Initial Scale "Pop" (Start at 0 and punch up to 1.2x size)
         transform.localScale = Vector3.zero;

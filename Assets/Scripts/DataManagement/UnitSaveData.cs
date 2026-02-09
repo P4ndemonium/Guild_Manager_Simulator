@@ -22,4 +22,5 @@ public class UnitSaveData
     public int partyNum;
     public bool isHired;
     public List<ItemSaveData> inventory;
+    public float condition;
 }

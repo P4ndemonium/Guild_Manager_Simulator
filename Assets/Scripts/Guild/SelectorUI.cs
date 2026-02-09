@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,6 +12,8 @@ public class SelectorUI : Adventurer, IPointerClickHandler
     [SerializeField] protected Image sImage;
     [SerializeField] protected TextMeshProUGUI sNameText;
     [SerializeField] protected TextMeshProUGUI sPartyNumText;
+    [SerializeField] protected Image ConditionBar;
+    [SerializeField] protected TextMeshProUGUI ConditionText;
 
     public Image SImage => sImage;
     public TextMeshProUGUI SNameText => sNameText;
@@ -38,6 +41,25 @@ public class SelectorUI : Adventurer, IPointerClickHandler
         sImage.sprite = library.allPossibleSprites[spriteID];
         sNameText.text = unitName;
         sPartyNumText.text = partyNum.ToString();
+
+        float duration = 0.5f;
+        float targetFill = condition / 100;
+
+        ConditionBar.DOKill();
+        DOTween.To(() => ConditionBar.fillAmount, x => ConditionBar.fillAmount = x, targetFill, duration).SetEase(Ease.OutQuad);
+
+        ConditionBar.DOKill();
+        float startC = condition;
+
+        DOTween.To(() => startC, x => {
+            ConditionText.text = $"{Mathf.CeilToInt(x)}%";
+        }, condition, duration);
+
+        if (targetFill < 0.25f)
+            ConditionBar.DOColor(Color.red, duration);
+        else
+            ConditionBar.DOColor(Color.green, duration);
+
     }
 
     public void OnPointerClick(PointerEventData eventData)

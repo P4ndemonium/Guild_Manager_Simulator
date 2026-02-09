@@ -1,9 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ConfirmationMemory : MonoBehaviour
 {
+    public static ConfirmationMemory Instance;
+    public GameObject questConfirmationPanel;
+
+    private void Awake()
+    {
+        if (Instance == null) { Instance = this; }
+        else { Destroy(gameObject); }
+    }
+
     // This is the variable that "remembers" the object
     private GameObject _rememberedObject;
 
@@ -19,10 +29,22 @@ public class ConfirmationMemory : MonoBehaviour
     {
         if (_rememberedObject != null)
         {
-            Debug.Log("Destroying: " + _rememberedObject.name);
-            Destroy(_rememberedObject);
+            // Check if the object actually has a parent
+            if (_rememberedObject.transform.parent != null)
+            {
+                GameObject parentObject = _rememberedObject.transform.parent.gameObject;
 
-            // Clear the memory so we don't try to destroy a null object twice
+                Debug.Log("Destroying Parent: " + parentObject.name);
+                Destroy(parentObject);
+            }
+            else
+            {
+                // Fallback: If no parent exists, destroy the object itself
+                Debug.LogWarning(_rememberedObject.name + " has no parent! Destroying itself instead.");
+                Destroy(_rememberedObject);
+            }
+
+            // Clear the memory
             _rememberedObject = null;
         }
         else

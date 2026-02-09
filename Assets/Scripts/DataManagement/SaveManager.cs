@@ -250,7 +250,7 @@ public class SaveManager : MonoBehaviour
             // If no file exists, set the default starting gold
             if (ProgressManager.Instance != null)
             {
-                ProgressManager.Instance.gold = 1000; // Your starting amount
+                ProgressManager.Instance.gold = 500; // Your starting amount
                 ProgressManager.Instance.week = 0;
                 ProgressManager.Instance.rating = 3f;
                 Debug.Log("No save found.");
@@ -319,5 +319,50 @@ public class SaveManager : MonoBehaviour
         int count = saveFile.hiredAdventurers.Count(u => u.partyNum == partyId);
 
         return count >= limit;
+    }
+
+    public void ProcessGuildRest()
+    {
+        // 1. Ensure we have the most recent data from the file
+        string path = GetPath(currentActiveSlot);
+        if (!File.Exists(path)) return;
+
+        string json = File.ReadAllText(path);
+        saveFile = JsonUtility.FromJson<GameSaveFile>(json);
+
+        if (saveFile.hiredAdventurers == null || saveFile.hiredAdventurers.Count == 0) return;
+
+        // 2. Iterate through the DATA (not GameObjects)
+        foreach (UnitSaveData data in saveFile.hiredAdventurers)
+        {
+            // Since the logic is inside the Unit class, we mimic it here.
+            // We calculate the gain and update the data object directly.
+            data.condition = CalculateConditionGain(data.condition);
+        }
+
+        // 3. Save the modified list back to the disk
+        SaveToFile();
+        Debug.Log($"Guild Rest Complete: {saveFile.hiredAdventurers.Count} adventurers recovered condition.");
+    }
+
+    public float CalculateConditionGain(float condition)
+    {
+        float gain = UnityEngine.Random.Range(70, 100);
+        return Mathf.Min(condition + gain, 100);
+    }
+
+    public bool IsAdventurerConditionZero()
+    {
+        if (saveFile == null || saveFile.hiredAdventurers == null)
+        {
+            Debug.LogWarning("SaveManager: No data to check condition.");
+            return false;
+        }
+
+        bool hasExhaustedMember = saveFile.hiredAdventurers
+            .Where(u => u.partyNum == QuestManager.Instance.selectedPartyNum)
+            .Any(u => u.condition <= 0);
+
+        return hasExhaustedMember;
     }
 }

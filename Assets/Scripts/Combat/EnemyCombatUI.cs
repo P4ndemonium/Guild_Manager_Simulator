@@ -54,16 +54,15 @@ public class EnemyCombatUI : Enemy
             else
                 healthBar.DOColor(Color.green, duration);
 
-            // 4. Update the static stat lists
-            statsTextLeft.text = $"STR: {STR}\n" +
-                                 $"DEX: {DEX}\n" +
-                                 $"VIT: {VIT}\n" +
-                                 $"SPI: {SPI}";
+            statsTextLeft.text = $"STR: {EffectiveSTR}\n" +
+                                 $"DEX: {EffectiveDEX}\n" +
+                                 $"VIT: {EffectiveVIT}\n" +
+                                 $"SPI: {EffectiveSPI}";
 
-            statsTextRight.text = $"INT: {INT}\n" +
-                                  $"WIS: {WIS}\n" +
-                                  $"END: {END}\n" +
-                                  $"AGI: {AGI}";
+            statsTextRight.text = $"INT: {EffectiveINT}\n" +
+                                  $"WIS: {EffectiveWIS}\n" +
+                                  $"END: {EffectiveEND}\n" +
+                                  $"AGI: {EffectiveAGI}";
         }
     }
 }

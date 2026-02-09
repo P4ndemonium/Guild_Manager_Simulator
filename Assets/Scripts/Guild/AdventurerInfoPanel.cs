@@ -119,6 +119,11 @@ public class AdventurerInfoPanel : MonoBehaviour
         {
             text.transform.DOPunchScale(new Vector3(0.2f, 0.2f, 0.2f), 0.3f);
         }
+
+        if (targetValue >= maxValue)
+            bar.DOColor(Color.cyan, duration);
+        else
+            bar.DOColor(Color.white, duration);
     }
 
     //public void UpParty()

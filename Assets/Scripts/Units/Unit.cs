@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using static UnityEngine.GraphicsBuffer;
 using System;
+using Unity.VisualScripting;
 
 public enum Team { Adventurer, Enemy }
 
@@ -55,6 +56,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] protected int speed; 
     [SerializeField] protected int actionCost; public int ActionCost => actionCost;
     [SerializeField] public int nextActionTime;
+    [SerializeField] protected float condition;
 
     public List<ItemSaveData> inventory = new List<ItemSaveData>();
 
@@ -117,7 +119,8 @@ public abstract class Unit : MonoBehaviour
             spriteID = this.spriteID,
             partyNum = this.partyNum,
             isHired = this.isHired,
-            inventory = this.inventory
+            inventory = this.inventory,
+            condition = this.condition
         };
     }
 
@@ -140,7 +143,8 @@ public abstract class Unit : MonoBehaviour
         this.spriteID = data.spriteID;
         this.partyNum = data.partyNum;
         this.isHired = data.isHired;
-        this.inventory = data.inventory;  
+        this.inventory = data.inventory;
+        this.condition = data.condition;
 
         CalculateStats();
     }
@@ -153,6 +157,32 @@ public abstract class Unit : MonoBehaviour
     //{
     //    partyNum -= 1;
     //}
+
+    public void CalculateConditionLoss()
+    {
+        // 1. Combine stats to create a "Gravity" value (Power)
+        // At 1/1 stats, power is 1.0 (perfectly random/linear)
+        // At 500/500 stats, power is 4.0 (heavily weighted toward 20)
+        float combinedStats = (EffectiveDEX + EffectiveWIS) / 1000f; // 0 to 1
+        float power = Mathf.Lerp(1f, 4f, combinedStats);
+
+        // 2. Generate a random value (0 to 1) and apply the power
+        // This is the "magic" part.
+        float biasedRandom = Mathf.Pow(UnityEngine.Random.value, power);
+
+        // 3. Map that value to your 20-50 range
+        // Since we want higher stats to result in LOWER numbers, 
+        // we use (1 - biasedRandom) to flip the curve.
+        float loss = Mathf.Lerp(20f, 50f, 1f - biasedRandom);
+
+        condition = Mathf.Max(0, condition - loss);
+    }
+
+    public void CalculateConditionGain() // NOT USED TBH CHECK SAVE MANAGER
+    {
+        float gain = UnityEngine.Random.Range(70, 100);
+        condition = Mathf.Max(condition + gain, 100);
+    }
 
     // ===================================================================================================
     // Combat
@@ -170,6 +200,7 @@ public abstract class Unit : MonoBehaviour
 
     public virtual void Die()
     {
+        if (unitTeam == Team.Adventurer) ProgressManager.Instance.rating -= 0.5f;
         isDead = true;
     }
 
@@ -181,12 +212,11 @@ public abstract class Unit : MonoBehaviour
         else return "magic";
     }
 
-    public virtual void CalculateOutgoingDamage(float damage, float reduction, float reduction_cap)
+    public virtual void CalculateOutgoingDamage(float damage, float targetArmour)
     {
-        float intendedDamage = damage * (1 - (reduction / 100));
-        float cappedDamage = damage * (1 - (reduction_cap / 100));
-        if (intendedDamage > cappedDamage) outgoingDamage = intendedDamage;
-        else outgoingDamage = cappedDamage;
+        float k = 125f;                            // K     100DEF  300DEF	500DEF 
+        float multiplier = k / (k + targetArmour); // 125	44.4%	70.6%	80.0% 
+        outgoingDamage = damage * multiplier;
     }
 
     public virtual IEnumerator Attack(Unit target)
@@ -227,9 +257,9 @@ public abstract class Unit : MonoBehaviour
         string damageType = GetDamageType();
 
         if (damageType == "physical")
-            CalculateOutgoingDamage(physicalDamage, target.EffectiveEND, 80);
+            CalculateOutgoingDamage(physicalDamage, target.EffectiveEND);
         else if (damageType == "magic")
-            CalculateOutgoingDamage(magicDamage, target.EffectiveSPI, 80);
+            CalculateOutgoingDamage(magicDamage, target.EffectiveSPI);
 
         target.TakeDamage(outgoingDamage);
     }
@@ -246,6 +276,7 @@ public abstract class Unit : MonoBehaviour
     {
         CombatManager.Instance.SpawnPopup(transform.position + Vector3.up, amount);
     }
+
 
     // ===================================================================================================
     // Training

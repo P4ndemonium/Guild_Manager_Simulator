@@ -16,7 +16,7 @@ public class CreateListings : MonoBehaviour
 
     void SpawnListings()
     {
-        spawnCount = Random.Range(3, 11);
+        spawnCount = Random.Range(5, 11);
 
         for (int i = 0; i < spawnCount; i++)
         {

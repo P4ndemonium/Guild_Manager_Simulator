@@ -23,7 +23,9 @@ public class Adventurer : Unit
         spriteID = Random.Range(0, library.allPossibleSprites.Count);
         partyNum = 0;
         baseStatTotal = STR + INT + DEX + WIS + VIT + END + SPI + AGI;
-        hiringPrice = ((baseStatTotal / 8) + Random.Range(0, 100));
+        hiringPrice = ((baseStatTotal / 8) + Random.Range(0, 50));
+
+        condition = 100;
 
         CalculateStats();
     }

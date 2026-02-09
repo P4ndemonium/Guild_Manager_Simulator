@@ -14,7 +14,7 @@ public class ProgressManager : MonoBehaviour
     // ================================================================
     // AUTO UPDATES UI IF CHANGES ANYWHERE
     // Gold
-    private int _gold;
+    [SerializeField] private int _gold;
     public int gold
     {
         get => _gold;
@@ -27,7 +27,7 @@ public class ProgressManager : MonoBehaviour
         }
     }
     // Week
-    private int _week;
+    [SerializeField] private int _week;
     public int week
     {
         get => _week;
@@ -39,7 +39,7 @@ public class ProgressManager : MonoBehaviour
         }
     }
     // Rating
-    private float _rating;
+    [SerializeField] private float _rating;
     public float rating
     {
         get => _rating;
@@ -60,5 +60,11 @@ public class ProgressManager : MonoBehaviour
     private void Start()
     {
         guildRank = GuildRank.F;
+    }
+
+    public void NextWeek()
+    {
+        week += 1;
+        SaveManager.Instance.ProcessGuildRest();
     }
 }

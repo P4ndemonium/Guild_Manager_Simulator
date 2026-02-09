@@ -166,23 +166,22 @@ public class CombatManager : MonoBehaviour
         return false;
     }
 
-    void EndBattle(Team winner)
+    private void EndBattle(Team winner)
     {
         endPanel.SetActive(true);
         if (winner == Team.Adventurer)
         {
+            ApplyConditionLoss();
             endText.text = $"VICTORY!!! Your party WON!!!\n\n" +
                 $"Gold received: {QuestManager.Instance.questReward}\n\n" +
                 $"Survivng members: {GetSurvivorList()}";
             ProgressManager.Instance.gold += QuestManager.Instance.questReward;
             ProgressManager.Instance.rating += 0.2f;
-            ProgressManager.Instance.week += 1;
         }
         else
         {
             endText.text = $"Your party was wiped out...";
-            ProgressManager.Instance.rating -= 1f;
-            ProgressManager.Instance.week += 1;
+            //ProgressManager.Instance.rating -= 1f; Changed to on adventurer death
         }
     }
 
@@ -199,5 +198,18 @@ public class CombatManager : MonoBehaviour
     {
         GameObject popup = Instantiate(popupPrefab, position, Quaternion.identity, popupParent);
         popup.GetComponent<DamagePopup>().Setup(amount);
+    }
+
+    private void ApplyConditionLoss()
+    {
+        foreach (Unit u in adventurers)
+        {
+            if (u == null) continue;
+
+            u.CalculateConditionLoss();
+
+            UnitSaveData updatedData = u.SaveToData();
+            SaveManager.Instance.UpdateUnitInSave(updatedData);
+        }
     }
 }
