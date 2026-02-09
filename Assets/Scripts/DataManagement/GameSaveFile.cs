@@ -7,7 +7,7 @@ public class GameSaveFile
 {
     public string saveTimestamp; // New field
     public int gold;
-    public int week;
+    public int month;
     public float rating;
     public List<ItemSaveData> stashItems = new List<ItemSaveData>();
     public List<UnitSaveData> hiredAdventurers = new List<UnitSaveData>();

@@ -24,5 +24,5 @@ public class UICommandBridge : MonoBehaviour
     public void ClickIncSelectedParty() { QuestManager.Instance.IncSelectedParty(); }
     public void ClickDecSelectedParty() { QuestManager.Instance.DecSelectedParty(); }
     public void ClickResetSelectedPartyNum() { QuestManager.Instance.ResetSelectedPartyNum(); }
-    public void ClickNextWeek() { ProgressManager.Instance.NextWeek(); }
+    public void ClickNextMonth() { ProgressManager.Instance.NextMonth(); }
 }

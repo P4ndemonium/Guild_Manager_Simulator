@@ -195,7 +195,7 @@ public class SaveManager : MonoBehaviour
         if (ProgressManager.Instance != null)
         {
             saveFile.gold = ProgressManager.Instance.gold;
-            saveFile.week = ProgressManager.Instance.week;
+            saveFile.month = ProgressManager.Instance.month;
             saveFile.rating = ProgressManager.Instance.rating;
         }
         else
@@ -238,7 +238,7 @@ public class SaveManager : MonoBehaviour
             if (ProgressManager.Instance != null)
             {
                 ProgressManager.Instance.gold = tempSave.gold;
-                ProgressManager.Instance.week = tempSave.week;
+                ProgressManager.Instance.month = tempSave.month;
                 ProgressManager.Instance.rating = tempSave.rating;
 
                 ProgressUI ui = FindFirstObjectByType<ProgressUI>();
@@ -251,7 +251,7 @@ public class SaveManager : MonoBehaviour
             if (ProgressManager.Instance != null)
             {
                 ProgressManager.Instance.gold = 500; // Your starting amount
-                ProgressManager.Instance.week = 0;
+                ProgressManager.Instance.month = 0;
                 ProgressManager.Instance.rating = 3f;
                 Debug.Log("No save found.");
             }
@@ -364,5 +364,91 @@ public class SaveManager : MonoBehaviour
             .Any(u => u.condition <= 0);
 
         return hasExhaustedMember;
+    }
+
+    public void ProcessAdvanceQuarter()
+    {
+        // 1. Ensure we have the latest data from the file
+        string path = GetPath(currentActiveSlot);
+        if (!File.Exists(path)) return;
+
+        string json = File.ReadAllText(path);
+        saveFile = JsonUtility.FromJson<GameSaveFile>(json);
+
+        if (saveFile.hiredAdventurers == null || saveFile.hiredAdventurers.Count == 0) return;
+
+        // 2. Iterate through the DATA objects
+        foreach (UnitSaveData data in saveFile.hiredAdventurers)
+        {
+            // Aging logic: growth starts to slip after a certain age (e.g., 10)
+            int agingThreshold = 30;
+            float agePenalty = Mathf.Max(0, data.age - agingThreshold);
+            float growthRoll = UnityEngine.Random.Range(0f, 100f);
+
+            // Logic: Younger units need to roll lower than 80 to grow. (80% chance)
+            // Older units have that threshold reduced by their age penalty.
+            if (growthRoll < (80f - agePenalty * 2))
+            {
+                data.GRO += UnityEngine.Random.Range(1, 4); // Small increase
+            }
+            else
+            {
+                data.GRO -= UnityEngine.Random.Range(1, 4); // Small decrease
+            }
+
+            data.GRO = Mathf.Clamp(data.GRO, 0, 100);
+
+            // Now trigger the attribute shift
+            data.STR = Mathf.Max(CalculateStatShift(data.STR, data.GRO), 1);
+            data.INT = Mathf.Max(CalculateStatShift(data.INT, data.GRO), 1);
+            data.DEX = Mathf.Max(CalculateStatShift(data.DEX, data.GRO), 1);
+            data.WIS = Mathf.Max(CalculateStatShift(data.WIS, data.GRO), 1);
+            data.VIT = Mathf.Max(CalculateStatShift(data.VIT, data.GRO), 1);
+            data.END = Mathf.Max(CalculateStatShift(data.END, data.GRO), 1);
+            data.SPI = Mathf.Max(CalculateStatShift(data.SPI, data.GRO), 1);
+            data.AGI = Mathf.Max(CalculateStatShift(data.AGI, data.GRO), 1);
+        }
+
+        // 3. Save the modified data back to disk
+        SaveToFile();
+        Debug.Log($"Advanced years for {saveFile.hiredAdventurers.Count} units in save slot {currentActiveSlot}.");
+    }
+
+    private int CalculateStatShift(int currentVal, int growthData)
+    {
+        int roll = UnityEngine.Random.Range(0, 100);
+        int changeAmount = UnityEngine.Random.Range(1, 6);
+
+        // If the roll is under the growthFactor, the stat improves
+        if (roll < growthData)
+        {
+            return currentVal + changeAmount;
+        }
+        else
+        {
+            return currentVal - changeAmount;
+        }
+    }
+
+    public void ProcessAdvanceYear()
+    {
+        // 1. Ensure we have the latest data from the file
+        string path = GetPath(currentActiveSlot);
+        if (!File.Exists(path)) return;
+
+        string json = File.ReadAllText(path);
+        saveFile = JsonUtility.FromJson<GameSaveFile>(json);
+
+        if (saveFile.hiredAdventurers == null || saveFile.hiredAdventurers.Count == 0) return;
+
+        // 2. Iterate through the DATA objects
+        foreach (UnitSaveData data in saveFile.hiredAdventurers)
+        {
+            data.age++;
+        }
+
+        // 3. Save the modified data back to disk
+        SaveToFile();
+        Debug.Log($"Advanced years for {saveFile.hiredAdventurers.Count} units in save slot {currentActiveSlot}.");
     }
 }

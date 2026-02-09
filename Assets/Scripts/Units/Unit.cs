@@ -58,6 +58,8 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] public int nextActionTime;
     [SerializeField] protected float condition;
 
+    [SerializeField] protected int agingThreshold = 40;  // When growth starts to decline
+
     public List<ItemSaveData> inventory = new List<ItemSaveData>();
 
     protected Dictionary<StatType, float> statBonuses = new Dictionary<StatType, float>();

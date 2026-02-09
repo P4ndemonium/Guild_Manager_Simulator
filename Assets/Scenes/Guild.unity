@@ -1646,7 +1646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goldText: {fileID: 1852457769}
-  weekText: {fileID: 0}
+  monthText: {fileID: 0}
   ratingText: {fileID: 0}
 --- !u!114 &265522450
 MonoBehaviour:
@@ -4775,6 +4775,7 @@ MonoBehaviour:
   actionCost: 0
   nextActionTime: 0
   condition: 0
+  agingThreshold: 40
   inventory: []
   givenNames:
   - Akari
@@ -5267,7 +5268,7 @@ GameObject:
   - component: {fileID: 752682400}
   - component: {fileID: 752682399}
   m_Layer: 5
-  m_Name: WeekText
+  m_Name: MonthText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11370,7 +11371,7 @@ GameObject:
   - component: {fileID: 1471676658}
   - component: {fileID: 1471676657}
   m_Layer: 5
-  m_Name: NextWeekButton
+  m_Name: NextMonthButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11442,7 +11443,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1149039409}
         m_TargetAssemblyTypeName: UICommandBridge, Assembly-CSharp
-        m_MethodName: ClickNextWeek
+        m_MethodName: ClickNextMonth
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12842,6 +12843,7 @@ MonoBehaviour:
   actionCost: 0
   nextActionTime: 0
   condition: 0
+  agingThreshold: 40
   inventory: []
   givenNames:
   - Akari
@@ -14601,7 +14603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goldText: {fileID: 1852457769}
-  weekText: {fileID: 0}
+  monthText: {fileID: 0}
   ratingText: {fileID: 0}
 --- !u!222 &1852457771
 CanvasRenderer:
@@ -15105,6 +15107,7 @@ MonoBehaviour:
   actionCost: 0
   nextActionTime: 0
   condition: 0
+  agingThreshold: 40
   inventory: []
   givenNames:
   - Akari
@@ -15553,7 +15556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goldText: {fileID: 1938723741}
-  weekText: {fileID: 752682399}
+  monthText: {fileID: 752682399}
   ratingText: {fileID: 1594761722}
 --- !u!1 &1940845279
 GameObject:

@@ -9,7 +9,6 @@ public class ProgressManager : MonoBehaviour
     public GuildRank guildRank;
     public int guildRankProgress;
     public int year;
-    public int month;
 
     // ================================================================
     // AUTO UPDATES UI IF CHANGES ANYWHERE
@@ -27,13 +26,13 @@ public class ProgressManager : MonoBehaviour
         }
     }
     // Week
-    [SerializeField] private int _week;
-    public int week
+    [SerializeField] private int _month;
+    public int month
     {
-        get => _week;
+        get => _month;
         set
         {
-            _week = value;
+            _month = value;
             FindFirstObjectByType<ProgressUI>()?.UpdateProgressText();
             if (GenerateTraining.Instance != null) GenerateTraining.Instance.GenerateWeightedOptions();
         }
@@ -62,9 +61,19 @@ public class ProgressManager : MonoBehaviour
         guildRank = GuildRank.F;
     }
 
-    public void NextWeek()
+    public void NextMonth()
     {
-        week += 1;
+        month += 1;
         SaveManager.Instance.ProcessGuildRest();
+
+        if (month % 3 == 0) // every quarter
+        {
+            SaveManager.Instance.ProcessAdvanceQuarter();
+        }
+
+        if (month % 12 == 0) // every year
+        {
+            SaveManager.Instance.ProcessAdvanceYear();
+        }
     }
 }
