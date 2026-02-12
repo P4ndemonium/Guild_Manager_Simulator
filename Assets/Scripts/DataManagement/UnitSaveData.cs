@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Rank { S, A, B, C, D, E, F }
+
 [System.Serializable]
 public class UnitSaveData
 {

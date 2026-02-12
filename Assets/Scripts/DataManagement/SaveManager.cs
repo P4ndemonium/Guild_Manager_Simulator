@@ -197,6 +197,7 @@ public class SaveManager : MonoBehaviour
             saveFile.gold = ProgressManager.Instance.gold;
             saveFile.month = ProgressManager.Instance.month;
             saveFile.rating = ProgressManager.Instance.rating;
+            saveFile.guildRank = ProgressManager.Instance.guildRank;
         }
         else
         {
@@ -240,6 +241,7 @@ public class SaveManager : MonoBehaviour
                 ProgressManager.Instance.gold = tempSave.gold;
                 ProgressManager.Instance.month = tempSave.month;
                 ProgressManager.Instance.rating = tempSave.rating;
+                ProgressManager.Instance.guildRank = tempSave.guildRank;
 
                 ProgressUI ui = FindFirstObjectByType<ProgressUI>();
                 if (ui != null) ui.UpdateProgressText();
@@ -253,6 +255,7 @@ public class SaveManager : MonoBehaviour
                 ProgressManager.Instance.gold = 500; // Your starting amount
                 ProgressManager.Instance.month = 0;
                 ProgressManager.Instance.rating = 3f;
+                ProgressManager.Instance.guildRank = Rank.F;
                 Debug.Log("No save found.");
             }
         }

@@ -5,8 +5,8 @@ using UnityEngine;
 public class ProgressManager : MonoBehaviour
 {
     public static ProgressManager Instance;
-    public enum GuildRank { S, A, B, C, D, E, F }
-    public GuildRank guildRank;
+
+    public Rank guildRank;
     public int guildRankProgress;
     public int year;
 
@@ -58,7 +58,6 @@ public class ProgressManager : MonoBehaviour
 
     private void Start()
     {
-        guildRank = GuildRank.F;
     }
 
     public void NextMonth()
