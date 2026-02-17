@@ -454,4 +454,43 @@ public class SaveManager : MonoBehaviour
         SaveToFile();
         Debug.Log($"Advanced years for {saveFile.hiredAdventurers.Count} units in save slot {currentActiveSlot}.");
     }
+
+    public void CheckGuildRankUp()
+    {
+        if (saveFile == null || saveFile.hiredAdventurers == null) return;
+        if (ProgressManager.Instance == null) return;
+
+        // 1. Determine what the "Next Rank" is.
+        // Since S=0 and F=6, the "Next Rank" is current - 1.
+        Rank currentGuildRank = ProgressManager.Instance.guildRank;
+
+        // If we are already S, we can't go higher.
+        if (currentGuildRank == Rank.S) return;
+
+        Rank targetRank = currentGuildRank - 1;
+
+        // 2. Count how many adventurers have reached that target rank OR HIGHER.
+        // Note: (u.rank <= targetRank) works because S(0) is "higher" than A(1).
+        int qualifiedUnits = saveFile.hiredAdventurers.Count(u => u.unitRank <= targetRank);
+
+        // 3. Check the condition (at least 3 units)
+        if (qualifiedUnits >= 3)
+        {
+            PerformGuildRankUp(targetRank);
+        }
+    }
+
+    private void PerformGuildRankUp(Rank newRank)
+    {
+        ProgressManager.Instance.guildRank = newRank;
+
+        // Update UI if you have it
+        ProgressUI ui = FindFirstObjectByType<ProgressUI>();
+        if (ui != null) ui.UpdateProgressText();
+
+        // Save the new rank to the file immediately
+        SaveToFile();
+
+        Debug.Log($"<color=green>Guild Promoted!</color> New Rank: {newRank}");
+    }
 }

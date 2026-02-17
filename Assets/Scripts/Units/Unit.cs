@@ -7,12 +7,15 @@ using UnityEngine.SocialPlatforms.Impl;
 using static UnityEngine.GraphicsBuffer;
 using System;
 using Unity.VisualScripting;
+using UnityEditor;
 
 public enum Team { Adventurer, Enemy }
 
 public abstract class Unit : MonoBehaviour
 {
     [SerializeField] protected Team unitTeam; public Team UnitTeam => unitTeam;
+    [SerializeField] protected Rank unitRank; public Rank UnitRank => unitRank;
+    [SerializeField] protected int rankProgress;
 
     [Header("Base Stats")]
     [SerializeField] protected string unitID; public string UnitID => unitID;
@@ -106,6 +109,8 @@ public abstract class Unit : MonoBehaviour
         return new UnitSaveData
         {
             unitTeam = this.unitTeam,
+            unitRank = this.unitRank,
+            rankProgress = this.rankProgress,
             unitID = this.unitID,
             unitName = this.unitName,
             STR = this.STR,
@@ -130,6 +135,8 @@ public abstract class Unit : MonoBehaviour
     public void LoadFromData(UnitSaveData data)
     {
         this.unitTeam = data.unitTeam;
+        this.unitRank = data.unitRank;
+        this.rankProgress = data.rankProgress;
         this.unitID = data.unitID;
         this.unitName = data.unitName;
         this.STR = data.STR;
@@ -180,10 +187,20 @@ public abstract class Unit : MonoBehaviour
         condition = Mathf.Max(0, condition - loss);
     }
 
-    public void CalculateConditionGain() // NOT USED TBH CHECK SAVE MANAGER
+    //public void CalculateConditionGain() // NOT USED TBH CHECK SAVE MANAGER
+    //{
+    //    float gain = UnityEngine.Random.Range(70, 100);
+    //    condition = Mathf.Max(condition + gain, 100);
+    //}
+
+    public void IncrementRankProgress()
     {
-        float gain = UnityEngine.Random.Range(70, 100);
-        condition = Mathf.Max(condition + gain, 100);
+        rankProgress++;
+        if (rankProgress >= 5 && unitRank > Rank.S)
+        {
+            unitRank--; // Moving from F (6) toward S (0)
+            rankProgress = 0;  // Reset progress
+        }
     }
 
     // ===================================================================================================

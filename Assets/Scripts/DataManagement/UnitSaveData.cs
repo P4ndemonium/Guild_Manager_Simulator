@@ -8,6 +8,8 @@ public enum Rank { S, A, B, C, D, E, F }
 public class UnitSaveData
 {
     public Team unitTeam;
+    public Rank unitRank;
+    public int rankProgress;
     public string unitID;
     public string unitName;
     public int STR;

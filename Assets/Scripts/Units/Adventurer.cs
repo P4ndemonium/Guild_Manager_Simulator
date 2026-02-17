@@ -8,6 +8,8 @@ public class Adventurer : Unit
     {
         unitID = System.Guid.NewGuid().ToString();
 
+        unitRank = Rank.F;
+
         STR = Random.Range(1, 101);
         INT = Random.Range(1, 101);
         DEX = Random.Range(1, 101);

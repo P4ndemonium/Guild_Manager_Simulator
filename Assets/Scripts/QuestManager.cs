@@ -11,6 +11,7 @@ public class QuestManager : MonoBehaviour
     public int partyLimit = 3;
     public TextMeshProUGUI selectedPartyNumText;
     public string encounter;
+    public Rank currentQuestRank;
     public int questReward;
 
     private void Awake()

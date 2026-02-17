@@ -171,7 +171,7 @@ public class CombatManager : MonoBehaviour
         endPanel.SetActive(true);
         if (winner == Team.Adventurer)
         {
-            ApplyConditionLoss();
+            ApplyPostBattleChanges();
             endText.text = $"VICTORY!!! Your party WON!!!\n\n" +
                 $"Gold received: {QuestManager.Instance.questReward}\n\n" +
                 $"Survivng members: {GetSurvivorList()}";
@@ -200,13 +200,14 @@ public class CombatManager : MonoBehaviour
         popup.GetComponent<DamagePopup>().Setup(amount);
     }
 
-    private void ApplyConditionLoss()
+    private void ApplyPostBattleChanges()
     {
         foreach (Unit u in adventurers)
         {
             if (u == null) continue;
 
             u.CalculateConditionLoss();
+            if (u.UnitRank > QuestManager.Instance.currentQuestRank) u.IncrementRankProgress(); // if wrong reverse condition sign
 
             UnitSaveData updatedData = u.SaveToData();
             SaveManager.Instance.UpdateUnitInSave(updatedData);

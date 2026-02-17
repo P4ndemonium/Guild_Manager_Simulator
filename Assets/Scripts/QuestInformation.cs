@@ -103,6 +103,7 @@ public class QuestInformation : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         QuestConfirmation.Instance.confirmation.SetActive(true);
+        QuestManager.Instance.currentQuestRank = questRank;
         FindFirstObjectByType<ConfirmationMemory>().SetObjectToRemember(gameObject);
     }
 

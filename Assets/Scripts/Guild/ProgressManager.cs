@@ -7,7 +7,6 @@ public class ProgressManager : MonoBehaviour
     public static ProgressManager Instance;
 
     public Rank guildRank;
-    public int guildRankProgress;
     public int year;
 
     // ================================================================
@@ -74,5 +73,7 @@ public class ProgressManager : MonoBehaviour
         {
             SaveManager.Instance.ProcessAdvanceYear();
         }
+
+        SaveManager.Instance.CheckGuildRankUp();
     }
 }
